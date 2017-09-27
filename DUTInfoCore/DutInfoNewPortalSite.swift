@@ -80,7 +80,7 @@ extension DUTInfo {
     
     private func newPortalLoginVerify(_ data: Data) throws -> Bool {
         let verifyStr = String(data: data, encoding: .utf8)
-        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=http://one.dlut.edu.cn/tp/view?m=up#&act=portal/viewhome\">" {
+        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=http://one.dlut.edu.cn/tp/view?m=up#&act=portal/viewhome\">\n" {
             throw DUTError.authError
         }
         return true
