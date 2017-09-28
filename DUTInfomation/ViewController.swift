@@ -15,8 +15,12 @@ class ViewController: UIViewController, DUTInfoDelegate {
         super.viewDidLoad()
         dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
         dutInfo.delegate = self
-        dutInfo.newPortalNetInfo()
-        dutInfo.scheduleInfo()
+        dutInfo.loginNewPortalSite(succeed: {
+            self.dutInfo.newPortalNetInfo()
+            self.dutInfo.scheduleInfo()
+        }) {
+            print("登录失败")
+        }
     }
     
     func setNetCost(_ netCost: String) {
