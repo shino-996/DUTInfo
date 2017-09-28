@@ -1,4 +1,4 @@
-去年就抓下来了，一直没整理，小学期有空整合一下，把改版后的网页又重抓一遍。因为之后要做成iOS的APP，所以就用了swift 3写的。使用了PromiseKit进行异步调用，以及Fuzi解析HTML。
+大连理工大学相关校园网站信息的抓取，swift 4 编写，使用了 PromiseKit 进行异步调用，以及 Fuzi 解析 HTML。
 
 # 可以抓到的信息
 
@@ -8,9 +8,16 @@
 - 玉兰卡及网络支付账户余额
 - 校园网各种信息
 
-# 访问网络条件
+# 抓取的网站
 
-校园门户上的信息在外网就可以访问，教务处上的信息（考试和成绩）只能在校园网环境下才可以抓到
+- [教务处][teach]（校园网访问）
+
+- [旧版校园门户][old_portal]（外网可访问）
+
+- [新版校园门户][new_portal]（外网可访问）
+
+- [校园网][net]（校园网访问）
+
 
 # 账户和密码
 
@@ -28,4 +35,9 @@
 
 # 使用方法
 
-都在ViewController里的viewDidLoad方法里写了，输出只是print输出，这坑得慢慢填……
+因为异步再加上 swift 的 KVO 还不大会用，都是用委托传值，可以看 ViewController 中的使用
+
+[teach]: http://zhjw.dlut.edu.cn
+[old_portal]: http://portal.dlut.edu.cn
+[new_portal]: http://one.dlut.edu.cn
+[net]: http://tulip.dlut.edu.cn
