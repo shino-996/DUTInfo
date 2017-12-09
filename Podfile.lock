@@ -1,15 +1,15 @@
 PODS:
-  - Fuzi (2.0.0)
-  - PromiseKit (4.4.0):
-    - PromiseKit/Foundation (= 4.4.0)
-    - PromiseKit/QuartzCore (= 4.4.0)
-    - PromiseKit/UIKit (= 4.4.0)
-  - PromiseKit/CorePromise (4.4.0)
-  - PromiseKit/Foundation (4.4.0):
+  - Fuzi (2.0.1)
+  - PromiseKit (4.5.0):
+    - PromiseKit/Foundation (= 4.5.0)
+    - PromiseKit/QuartzCore (= 4.5.0)
+    - PromiseKit/UIKit (= 4.5.0)
+  - PromiseKit/CorePromise (4.5.0)
+  - PromiseKit/Foundation (4.5.0):
     - PromiseKit/CorePromise
-  - PromiseKit/QuartzCore (4.4.0):
+  - PromiseKit/QuartzCore (4.5.0):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (4.4.0):
+  - PromiseKit/UIKit (4.5.0):
     - PromiseKit/CorePromise
 
 DEPENDENCIES:
@@ -17,8 +17,8 @@ DEPENDENCIES:
   - PromiseKit
 
 SPEC CHECKSUMS:
-  Fuzi: 7df3118e601c33e9f9b609cb2fabde55506f964e
-  PromiseKit: ecf5fe92275d57ee77c9ede858af47a162e9b97e
+  Fuzi: f64983dea705491d3aedd32351247a09523e7efd
+  PromiseKit: 9c1d9f6d7b65e3951a90bea7f407c56972be5d8e
 
 PODFILE CHECKSUM: 6dc964a9ab9777f008f5108f2a99f9759b02d2ff
 

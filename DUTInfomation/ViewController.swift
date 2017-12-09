@@ -10,17 +10,15 @@ import UIKit
 
 class ViewController: UIViewController, DUTInfoDelegate {
     var dutInfo: DUTInfo!
-
     override func viewDidLoad() {
         super.viewDidLoad()
         dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
         dutInfo.delegate = self
-        dutInfo.loginNewPortalSite(succeed: {
-            self.dutInfo.newPortalNetInfo()
-            self.dutInfo.scheduleInfo()
-        }) {
+        dutInfo.loginTeachSite(succeed: {
+            self.dutInfo.courseInfo()
+        }, failed: {
             print("登录失败")
-        }
+        })
     }
     
     func setNetCost(_ netCost: String) {
