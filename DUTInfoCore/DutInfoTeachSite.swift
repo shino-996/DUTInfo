@@ -133,7 +133,7 @@ extension DUTInfo {
                 let courseDic = [
                     "name": lastCourse["name"]!,
                     "teacher": lastCourse["teacher"]!,
-                    "weeknumer": weeknumer,
+                    "weeknumber": weeknumer,
                     "week": week,
                     "coursenumber": coursenumber,
                     "place": place
@@ -141,7 +141,7 @@ extension DUTInfo {
                 courseData.append(courseDic)
             }
         }
-        print(courseData)
+        delegate.setSchedule(courseData)
     }
     
     //查询本学期成绩
