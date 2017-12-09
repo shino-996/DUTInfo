@@ -55,6 +55,18 @@ extension DUTInfo {
     }
 }
 
+//干TM的GBK编码, 只有教务处网站会用到
+extension Data {
+    var unicodeString: String {
+        if let string = String(data: self, encoding: .utf8) {
+            return string
+        }
+        let cfEncoding = CFStringEncodings.GB_18030_2000
+        let encoding = CFStringConvertEncodingToNSStringEncoding(CFStringEncoding(cfEncoding.rawValue))
+        return NSString(data: self, encoding: encoding)! as String
+    }
+}
+
 //接口实现
 extension DUTInfo {
     private func gotoTeachPage() -> URLDataPromise {
@@ -94,52 +106,35 @@ extension DUTInfo {
         var courseData = [[String: String]]()
         for course in courses {
             let items = course.xpath("./td")
+            let weeknumber = items[11].stringValue
+                .trimmingCharacters(in: .whitespaces)
+                .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
+            let week = items[12].stringValue.trimmingCharacters(in: .whitespaces)
+            let coursenumber = "第"
+                + items[13].stringValue.trimmingCharacters(in: .whitespaces)
+                + "节"
+            let place = items[5].stringValue.trimmingCharacters(in: .whitespaces)
+                + " "
+                + items[6].stringValue.trimmingCharacters(in: .whitespaces)
+            var courseDic = [
+                "weeknumber": weeknumber,
+                "week": week,
+                "coursenumber": coursenumber,
+                "place": place
+            ]
             if items.count > 7 {
-                let name = items[2].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                let name = items[2].stringValue.trimmingCharacters(in: .whitespaces)
                 let teacher = items[7].stringValue
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                    .trimmingCharacters(in: .whitespaces)
                     .filter {$0 != "*"}
-                let weeknumber = items[11].stringValue
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-                    .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
-                let week = items[12].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                let coursenumber = "第"
-                    + items[13].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                    + "节"
-                let place = items[15].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                    + " "
-                    + items[16].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                let courseDic = [
-                    "name": name,
-                    "teacher": teacher,
-                    "weeknumber": weeknumber,
-                    "week": week,
-                    "coursenumber": coursenumber,
-                    "place": place
-                ]
-                courseData.append(courseDic)
+                courseDic["name"] = name
+                courseDic["teacher"] = teacher
             } else {
-                let weeknumer = items[0].stringValue
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-                    .filter{$0.unicodeScalars.first?.value ?? 128 < 128}
-                let week = items[1].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                let coursenumber = "第"
-                    + items[2].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                    + "节"
-                let place = items[5].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                    + " "
-                    + items[6].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 let lastCourse = courseData.last!
-                let courseDic = [
-                    "name": lastCourse["name"]!,
-                    "teacher": lastCourse["teacher"]!,
-                    "weeknumber": weeknumer,
-                    "week": week,
-                    "coursenumber": coursenumber,
-                    "place": place
-                ]
-                courseData.append(courseDic)
+                courseDic["name"] = lastCourse["name"]!
+                courseDic["teacher"] = lastCourse["teache"]!
             }
+            courseData.append(courseDic)
         }
         delegate.setSchedule(courseData)
     }
@@ -160,7 +155,7 @@ extension DUTInfo {
         let courses = pharseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
         for course in courses {
             for item in course.xpath("./td") {
-                print(item.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
+                print(item.stringValue.trimmingCharacters(in: .whitespaces))
             }
         }
     }
