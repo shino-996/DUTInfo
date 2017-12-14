@@ -18,12 +18,13 @@ protocol DUTInfoDelegate {
     func setSchedule(_ courseArray: [[String: String]])
     
     //当网络异常时会调用的委托方法
-    func netErrorHandle()
+    func netErrorHandle(_ error: Error)
 }
 
 //可能会遇到的错误类型
 enum DUTError: Error {
     case authError
+    case evaluateError
 }
 
 class DUTInfo: NSObject {
@@ -35,8 +36,6 @@ class DUTInfo: NSObject {
     var portalPassword: String
     
     //用于网络请求的session
-    //旧版校园门户
-    var portalSession: URLSession!
     //新版校园门户
     var newPortalSession: URLSession!
     //教务处

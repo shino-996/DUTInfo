@@ -12,7 +12,7 @@ class ViewController: UIViewController, DUTInfoDelegate {
     var dutInfo: DUTInfo!
     override func viewDidLoad() {
         super.viewDidLoad()
-        dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
+        dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务外密码", portalPassword: "校园门户密码")
         dutInfo.delegate = self
         dutInfo.loginTeachSite(succeed: {
             self.dutInfo.courseInfo()
@@ -37,7 +37,17 @@ class ViewController: UIViewController, DUTInfoDelegate {
         print(courseArray)
     }
     
-    func netErrorHandle() {
+    func netErrorHandle(_ error: Error) {
+        print(error)
+        if let error = error as? DUTError {
+            if error == DUTError.authError {
+                print("登录错误")
+            } else if error == DUTError.evaluateError {
+                print("未完成教学评估")
+            }
+        } else {
+            print("网络错误")
+        }
     }
 }
 

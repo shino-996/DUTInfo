@@ -34,6 +34,7 @@ extension DUTInfo {
         firstly(execute: gotoTeachPage)
             .then(execute: teachLoginVerify)
             .then(execute: gotoCoursePage)
+            .then(execute: evaluateVerify)
             .then(execute: getCourse)
             .catch(execute: teachErrorHandle)
     }
@@ -98,41 +99,52 @@ extension DUTInfo {
         return teachSession.dataTask(with: request)
     }
     
-    //解析出各门课程
-    private func getCourse(_ data: Data) {
+    private func evaluateVerify(_ data: Data) throws -> String {
         let requestString = data.unicodeString
         let pharseString = try! HTMLDocument(string: requestString)
+        guard let verifyStr = pharseString.title else {
+            return requestString
+        }
+        if verifyStr.trimmingCharacters(in: .whitespacesAndNewlines) == "错误信息" {
+            throw DUTError.evaluateError
+        } else {
+            return requestString
+        }
+    }
+    
+    //解析出各门课程
+    private func getCourse(_ string: String) {
+        let pharseString = try! HTMLDocument(string: string)
         let courses = pharseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
         var courseData = [[String: String]]()
         for course in courses {
             let items = course.xpath("./td")
-            let weeknumber = items[11].stringValue
-                .trimmingCharacters(in: .whitespaces)
-                .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
-            let week = items[12].stringValue.trimmingCharacters(in: .whitespaces)
-            let coursenumber = "第"
-                + items[13].stringValue.trimmingCharacters(in: .whitespaces)
-                + "节"
-            let place = items[5].stringValue.trimmingCharacters(in: .whitespaces)
-                + " "
-                + items[6].stringValue.trimmingCharacters(in: .whitespaces)
-            var courseDic = [
-                "weeknumber": weeknumber,
-                "week": week,
-                "coursenumber": coursenumber,
-                "place": place
-            ]
+            var courseDic = [String: String]()
             if items.count > 7 {
-                let name = items[2].stringValue.trimmingCharacters(in: .whitespaces)
-                let teacher = items[7].stringValue
-                    .trimmingCharacters(in: .whitespaces)
+                courseDic["name"] = items[2].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                courseDic["teacher"] = items[7].stringValue
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0 != "*"}
-                courseDic["name"] = name
-                courseDic["teacher"] = teacher
+                courseDic["weeknumber"] = items[11].stringValue
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                    .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
+                courseDic["week"] = items[12].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                courseDic["coursenumber"] = items[13].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                courseDic["place"] = items[16].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                    + " "
+                    + items[17].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
             } else {
                 let lastCourse = courseData.last!
                 courseDic["name"] = lastCourse["name"]!
-                courseDic["teacher"] = lastCourse["teache"]!
+                courseDic["teacher"] = lastCourse["teacher"]!
+                courseDic["weeknumber"] = items[0].stringValue
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                    .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
+                courseDic["week"] = items[1].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                courseDic["coursenumber"] = items[2].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                courseDic["place"] = items[5].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                    + " "
+                    + items[6].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
             }
             courseData.append(courseDic)
         }
@@ -155,13 +167,12 @@ extension DUTInfo {
         let courses = pharseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
         for course in courses {
             for item in course.xpath("./td") {
-                print(item.stringValue.trimmingCharacters(in: .whitespaces))
+                print(item.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
             }
         }
     }
 
     //查询考试安排
-    //因为我小学期没有考试……等抓到有考试的人再用他的账号抓吧【
     private func gotoTestPage(_: Bool) -> URLDataPromise {
         let url = URL(string: "http://zhjw.dlut.edu.cn/ksApCxAction.do?oper=getKsapXx")!
         let request = URLRequest(url: url)
@@ -183,11 +194,13 @@ extension DUTInfo {
         print(error)
         if let error = error as? DUTError {
             if error == .authError {
-                print("教务处用户名或密码错误！")
+                print("教务处用户名或密码错误!")
+            } else if error == .evaluateError {
+                print("教学评估未完成!")
             }
         } else {
             print("其他错误")
         }
-        delegate.netErrorHandle()
+        delegate.netErrorHandle(error)
     }
 }

@@ -138,6 +138,6 @@ extension DUTInfo {
         } else {
             print("其他错误")
         }
-        delegate.netErrorHandle()
+        delegate.netErrorHandle(error)
     }
 }

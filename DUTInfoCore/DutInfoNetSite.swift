@@ -195,6 +195,6 @@ extension DUTInfo {
                 print("其他错误")
             }
         }
-        delegate.netErrorHandle()
+        delegate.netErrorHandle(error)
     }
 }
