@@ -10,7 +10,7 @@ import PromiseKit
 import Fuzi
 import Foundation
 
-protocol DUTInfoDelegate {
+protocol DUTInfoDelegate: AnyObject {
     //当DUTInfo属性更改时会调用的委托方法
     func setNetCost(_ netCost: String)
     func setNetFlow(_ netFlow: String)
@@ -44,7 +44,7 @@ class DUTInfo: NSObject {
     var netSession: URLSession!
     
     //委托对象，用于属性更新时的回调
-    var delegate: DUTInfoDelegate!
+    weak var delegate: DUTInfoDelegate?
         
     override init() {
         studentNumber = ""
@@ -60,17 +60,17 @@ class DUTInfo: NSObject {
     
     var netCost: String! {
         didSet {
-            delegate.setNetCost(netCost)
+            delegate?.setNetCost(netCost)
         }
     }
     var netFlow: String! {
         didSet {
-            delegate.setNetFlow(netFlow)
+            delegate?.setNetFlow(netFlow)
         }
     }
     var ecardCost: String! {
         didSet {
-            delegate.setEcardCost(ecardCost)
+            delegate?.setEcardCost(ecardCost)
         }
     }
     

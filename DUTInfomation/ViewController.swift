@@ -15,7 +15,8 @@ class ViewController: UIViewController, DUTInfoDelegate {
         dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务外密码", portalPassword: "校园门户密码")
         dutInfo.delegate = self
         dutInfo.loginTeachSite(succeed: {
-            self.dutInfo.courseInfo()
+            [weak self] in
+            self?.dutInfo.courseInfo()
         }, failed: {
             print("登录失败")
         })

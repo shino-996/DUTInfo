@@ -148,7 +148,7 @@ extension DUTInfo {
             }
             courseData.append(courseDic)
         }
-        delegate.setSchedule(courseData)
+        delegate?.setSchedule(courseData)
     }
     
     //查询本学期成绩
@@ -201,6 +201,6 @@ extension DUTInfo {
         } else {
             print("其他错误")
         }
-        delegate.netErrorHandle(error)
+        delegate?.netErrorHandle(error)
     }
 }
