@@ -12,11 +12,11 @@ class ViewController: UIViewController, DUTInfoDelegate {
     var dutInfo: DUTInfo!
     override func viewDidLoad() {
         super.viewDidLoad()
-        dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务外密码", portalPassword: "校园门户密码")
+        dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
         dutInfo.delegate = self
         dutInfo.loginTeachSite(succeed: {
             [weak self] in
-            self?.dutInfo.courseInfo()
+            self?.dutInfo.testInfo()
         }, failed: {
             print("登录失败")
         })
@@ -36,6 +36,10 @@ class ViewController: UIViewController, DUTInfoDelegate {
     
     func setSchedule(_ courseArray: [[String : String]]) {
         print(courseArray)
+    }
+    
+    func setTest(_ testArray: [[String : String]]) {
+        print(testArray)
     }
     
     func netErrorHandle(_ error: Error) {

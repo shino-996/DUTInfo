@@ -178,16 +178,23 @@ extension DUTInfo {
         let request = URLRequest(url: url)
         return teachSession.dataTask(with: request)
     }
-    
+    // 解析考试信息
     private func getTest(_ data: Data) {
         let requestString = data.unicodeString
         let pharseString = try! HTMLDocument(string: requestString)
         let courses = pharseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
+        var testData = [[String: String]]()
         for course in courses {
-            for item in course.xpath("./td") {
-                print(item.stringValue)
-            }
+            var testDic = [String: String]()
+            let item = course.xpath("./td")
+            testDic["name"] = item[4].stringValue
+            testDic["teachweek"] = item[0].stringValue.filter{ $0.unicodeScalars.first?.value ?? 128 < 128 }
+            testDic["date"] = item[5].stringValue
+            testDic["time"] = item[6].stringValue
+            testDic["place"] = item[2].stringValue + " " + item[3].stringValue
+            testData.append(testDic)
         }
+        delegate?.setTest(testData)
     }
 
     private func teachErrorHandle(_ error: Error) {

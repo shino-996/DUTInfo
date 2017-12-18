@@ -16,6 +16,7 @@ protocol DUTInfoDelegate: AnyObject {
     func setNetFlow(_ netFlow: String)
     func setEcardCost(_ ecardCost: String)
     func setSchedule(_ courseArray: [[String: String]])
+    func setTest(_ testArray: [[String : String]])
     
     //当网络异常时会调用的委托方法
     func netErrorHandle(_ error: Error)
