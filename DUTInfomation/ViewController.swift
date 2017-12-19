@@ -14,12 +14,11 @@ class ViewController: UIViewController, DUTInfoDelegate {
         super.viewDidLoad()
         dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
         dutInfo.delegate = self
-        dutInfo.loginTeachSite(succeed: {
-            [weak self] in
-            self?.dutInfo.testInfo()
-        }, failed: {
-            print("登录失败")
-        })
+        dutInfo.loginNewPortalSite(succeed: { [unowned self] in
+            self.dutInfo.newPortalPersonInfo()
+        }) {
+            print("error")
+        }
     }
     
     func setNetCost(_ netCost: String) {
@@ -40,6 +39,10 @@ class ViewController: UIViewController, DUTInfoDelegate {
     
     func setTest(_ testArray: [[String : String]]) {
         print(testArray)
+    }
+    
+    func setPersonName(_ personName: String) {
+        print(personName)
     }
     
     func netErrorHandle(_ error: Error) {

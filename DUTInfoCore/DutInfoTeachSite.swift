@@ -101,8 +101,8 @@ extension DUTInfo {
     
     private func evaluateVerify(_ data: Data) throws -> String {
         let requestString = data.unicodeString
-        let pharseString = try! HTMLDocument(string: requestString)
-        guard let verifyStr = pharseString.title else {
+        let parseString = try! HTMLDocument(string: requestString)
+        guard let verifyStr = parseString.title else {
             return requestString
         }
         if verifyStr.trimmingCharacters(in: .whitespacesAndNewlines) == "错误信息" {
@@ -114,8 +114,8 @@ extension DUTInfo {
     
     //解析出各门课程
     private func getCourse(_ string: String) {
-        let pharseString = try! HTMLDocument(string: string)
-        let courses = pharseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
+        let parseString = try! HTMLDocument(string: string)
+        let courses = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
         var courseData = [[String: String]]()
         for course in courses {
             let items = course.xpath("./td")
@@ -162,9 +162,9 @@ extension DUTInfo {
     //解析出各科成绩
     private func getGrade(_ data: Data) {
         let requestString = data.unicodeString
-        let pharseString = try! HTMLDocument(string: requestString)
+        let parseString = try! HTMLDocument(string: requestString)
         //找到分数所在的标签
-        let courses = pharseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
+        let courses = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
         for course in courses {
             for item in course.xpath("./td") {
                 print(item.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
@@ -181,8 +181,8 @@ extension DUTInfo {
     // 解析考试信息
     private func getTest(_ data: Data) {
         let requestString = data.unicodeString
-        let pharseString = try! HTMLDocument(string: requestString)
-        let courses = pharseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
+        let parseString = try! HTMLDocument(string: requestString)
+        let courses = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
         var testData = [[String: String]]()
         for course in courses {
             var testDic = [String: String]()

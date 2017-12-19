@@ -17,6 +17,7 @@ protocol DUTInfoDelegate: AnyObject {
     func setEcardCost(_ ecardCost: String)
     func setSchedule(_ courseArray: [[String: String]])
     func setTest(_ testArray: [[String : String]])
+    func setPersonName(_ personName: String)
     
     //当网络异常时会调用的委托方法
     func netErrorHandle(_ error: Error)
@@ -72,6 +73,12 @@ class DUTInfo: NSObject {
     var ecardCost: String! {
         didSet {
             delegate?.setEcardCost(ecardCost)
+        }
+    }
+    
+    var personName: String! {
+        didSet {
+            delegate?.setPersonName(personName)
         }
     }
     

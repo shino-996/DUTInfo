@@ -42,6 +42,18 @@ extension DUTInfo {
                 print(error)
         }
     }
+    
+    func newPortalPersonInfo() {
+        firstly(execute: gotoNewPortalPage)
+            .then(execute: loginNewPortal)
+            .then(execute: newPortalLoginVerify)
+            .then(execute: getNewPortalPersonInfo)
+            .then(execute: parseNewPortalPersonInto)
+            .catch { error in
+                print(error)
+        }
+        
+    }
 }
 
 //接口实现
@@ -55,16 +67,22 @@ extension DUTInfo {
     
     //额……新版的门户登录验证信息用了DES加密，我就直接运行js版的算法，不改成swift了
     private func desEncode(_ text: String) -> String {
-        let jscontext = JSContext()
+        guard let jscontext = JSContext() else {
+            fatalError()
+        }
         if let jsPath = Bundle.main.path(forResource: "des", ofType: "js") {
             let jsStr = try! String(contentsOfFile: jsPath)
-            _ = jscontext?.evaluateScript(jsStr)
+            _ = jscontext.evaluateScript(jsStr)
         } else {
             fatalError()
         }
-        let jsFunc = jscontext?.objectForKeyedSubscript("strEnc")
-        let encode = jsFunc!.call(withArguments: [text, "1", "2", "3"])
-        return encode!.toString()
+        guard let jsFunc = jscontext.objectForKeyedSubscript("strEnc") else {
+            fatalError()
+        }
+        guard let encode = jsFunc.call(withArguments: [text, "1", "2", "3"]) else {
+            fatalError()
+        }
+        return encode.toString()
     }
     
     private func loginNewPortal(_ data: Data) -> URLDataPromise {
@@ -127,6 +145,25 @@ extension DUTInfo {
         let json = try! JSONSerialization.jsonObject(with: moneyInfoData)
                    as! [String: String]
         ecardCost = json["cardbal"]! + "元"
+    }
+    
+    private func getNewPortalPersonInfo() -> URLDataPromise {
+        let url = URL(string: "http://portal.dlut.edu.cn/tp/sys/uacm/profile/getUserById")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.httpBody = """
+        {
+            "ID_NUMBER": "\(self.studentNumber)"
+        }
+        """.data(using: .utf8)
+        return newPortalSession.dataTask(with: request)
+    }
+    
+    private func parseNewPortalPersonInto(_ personInfoData: Data) -> Void {
+        let json = try! JSONSerialization.jsonObject(with: personInfoData)
+                   as! [String: Any]
+        personName = json["USER_NAME"] as! String
     }
     
     private func newPortalErrorHandle(_ error: Error) {
