@@ -59,7 +59,7 @@ extension DUTInfo {
 //接口实现
 extension DUTInfo {
     private func gotoNewPortalPage() -> URLDataPromise {
-        let url = URL(string: "https://sso.dlut.edu.cn/cas/login?service=http%3A%2F%2Fportal.dlut.edu.cn%2Ftp%2F")!
+        let url = URL(string: "http://portal.dlut.edu.cn")!
         let request = URLRequest(url: url)
         newPortalSession = URLSession(configuration: .ephemeral)
         return newPortalSession.dataTask(with: request)
@@ -85,10 +85,24 @@ extension DUTInfo {
         return encode.toString()
     }
     
-    private func loginNewPortal(_ data: Data) -> URLDataPromise {
+    private func loginNewPortal(_ data: Data) throws -> URLDataPromise {
         let parseStr = try! HTMLDocument(data: data)
         let lt_ticket = parseStr.body?.children[0].children[6].attr("value")
-        let url = URL(string: "https://sso.dlut.edu.cn/cas/login?service=http%3A%2F%2Fportal.dlut.edu.cn%2Ftp%2F")!
+        guard let cookieStorage = newPortalSession.configuration.httpCookieStorage else {
+            print("no cookie")
+            throw DUTError.authError
+        }
+        guard let cookies = cookieStorage.cookies(for: URL(string: "https://sso.dlut.edu.cn")!) else {
+            print("no cookie array")
+            throw DUTError.authError
+        }
+        var cookieString = "jsessionid="
+        for cookie in cookies {
+            if cookie.name == "JSESSIONID" {
+                cookieString += cookie.value
+            }
+        }
+        let url = URL(string: "https://sso.dlut.edu.cn/cas/login;" + cookieString + "?service=http%3A%2F%2Fportal.dlut.edu.cn%2Ftp%2F")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = ("rsa=" + self.desEncode(studentNumber + portalPassword + lt_ticket!) + "&ul=9&pl=14&" + lt_ticket! + "&execution=e1s1&_eventId=submit").data(using: .utf8)!
@@ -97,7 +111,7 @@ extension DUTInfo {
     
     private func newPortalLoginVerify(_ data: Data) throws -> Bool {
         let verifyStr = String(data: data, encoding: .utf8)
-        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=/tp/view?m=up#&act=portal/viewhome\">\n" {
+        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=https://portal.dlut.edu.cn/tp/view?m=up#&act=portal/viewhome\">\n" {
             throw DUTError.authError
         }
         return true
@@ -105,13 +119,13 @@ extension DUTInfo {
     
     private func newPortalLoginVerify(_ data: Data) throws {
         let verifyStr = String(data: data, encoding: .utf8)
-        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=/tp/view?m=up#&act=portal/viewhome\">\n" {
+        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=https://portal.dlut.edu.cn/tp/view?m=up#&act=portal/viewhome\">\n" {
             throw DUTError.authError
         }
     }
     
     private func getNewPortalNetInfo() -> URLDataPromise {
-        let url = URL(string: "http://portal.dlut.edu.cn/tp/up/subgroup/getTrafficList")!
+        let url = URL(string: "https://portal.dlut.edu.cn/tp/up/subgroup/getTrafficList")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
@@ -133,7 +147,7 @@ extension DUTInfo {
     }
     
     private func getNewPortalMoneyInfo() -> URLDataPromise {
-        let url = URL(string: "http://portal.dlut.edu.cn/tp/up/subgroup/getCardMoney")!
+        let url = URL(string: "https://portal.dlut.edu.cn/tp/up/subgroup/getCardMoney")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
@@ -148,7 +162,7 @@ extension DUTInfo {
     }
     
     private func getNewPortalPersonInfo() -> URLDataPromise {
-        let url = URL(string: "http://portal.dlut.edu.cn/tp/sys/uacm/profile/getUserById")!
+        let url = URL(string: "https://portal.dlut.edu.cn/tp/sys/uacm/profile/getUserById")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
