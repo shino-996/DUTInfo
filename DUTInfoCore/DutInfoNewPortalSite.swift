@@ -110,16 +110,19 @@ extension DUTInfo {
     }
     
     private func newPortalLoginVerify(_ data: Data) throws -> Bool {
-        let verifyStr = String(data: data, encoding: .utf8)
-        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=/tp/view?m=up#&act=portal/viewhome\">\n" {
+        let verifyStr = String(data: data, encoding: .utf8)!
+        if verifyStr.hasPrefix("<META http-equiv=\"Refresh\" content=\"0; url=") {
+            return true
+        } else {
             throw DUTError.authError
         }
-        return true
     }
     
     private func newPortalLoginVerify(_ data: Data) throws {
-        let verifyStr = String(data: data, encoding: .utf8)
-        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=/tp/view?m=up#&act=portal/viewhome\">\n" {
+        let verifyStr = String(data: data, encoding: .utf8)!
+        if verifyStr.hasPrefix("<META http-equiv=\"Refresh\" content=\"0; url=") {
+            return
+        } else {
             throw DUTError.authError
         }
     }

@@ -12,7 +12,7 @@ class ViewController: UIViewController, DUTInfoDelegate {
     var dutInfo: DUTInfo!
     override func viewDidLoad() {
         super.viewDidLoad()
-        dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "教务处密码")
+        dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
         dutInfo.delegate = self
         dutInfo.loginNewPortalSite(succeed: { [unowned self] in
             self.dutInfo.newPortalNetInfo()
