@@ -59,7 +59,7 @@ extension DUTInfo {
 //接口实现
 extension DUTInfo {
     private func gotoNewPortalPage() -> URLDataPromise {
-        let url = URL(string: "http://portal.dlut.edu.cn")!
+        let url = URL(string: "https://sso.dlut.edu.cn/cas/login?service=https%3A%2F%2Fportal.dlut.edu.cn%2Ftp%2F")!
         let request = URLRequest(url: url)
         newPortalSession = URLSession(configuration: .ephemeral)
         return newPortalSession.dataTask(with: request)
@@ -102,7 +102,7 @@ extension DUTInfo {
                 cookieString += cookie.value
             }
         }
-        let url = URL(string: "https://sso.dlut.edu.cn/cas/login;" + cookieString + "?service=http%3A%2F%2Fportal.dlut.edu.cn%2Ftp%2F")!
+        let url = URL(string: "https://sso.dlut.edu.cn/cas/login;" + cookieString + "?service=https%3A%2F%2Fportal.dlut.edu.cn%2Ftp%2F")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = ("rsa=" + self.desEncode(studentNumber + portalPassword + lt_ticket!) + "&ul=9&pl=14&" + lt_ticket! + "&execution=e1s1&_eventId=submit").data(using: .utf8)!
@@ -111,7 +111,7 @@ extension DUTInfo {
     
     private func newPortalLoginVerify(_ data: Data) throws -> Bool {
         let verifyStr = String(data: data, encoding: .utf8)
-        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=https://portal.dlut.edu.cn/tp/view?m=up#&act=portal/viewhome\">\n" {
+        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=/tp/view?m=up#&act=portal/viewhome\">\n" {
             throw DUTError.authError
         }
         return true
@@ -119,7 +119,7 @@ extension DUTInfo {
     
     private func newPortalLoginVerify(_ data: Data) throws {
         let verifyStr = String(data: data, encoding: .utf8)
-        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=https://portal.dlut.edu.cn/tp/view?m=up#&act=portal/viewhome\">\n" {
+        if verifyStr != "<META http-equiv=\"Refresh\" content=\"0; url=/tp/view?m=up#&act=portal/viewhome\">\n" {
             throw DUTError.authError
         }
     }
