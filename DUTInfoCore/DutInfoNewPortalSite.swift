@@ -16,7 +16,7 @@ import JavaScriptCore
 
 //接口
 extension DUTInfo {
-    func loginNewPortalSite(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
+    public func loginNewPortalSite(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
         firstly(execute: gotoNewPortalPage)
             .then(execute: loginNewPortal)
             .then(execute: newPortalLoginVerify)
@@ -30,7 +30,7 @@ extension DUTInfo {
             }
     }
     
-    func newPortalNetInfo() {
+    public func newPortalNetInfo() {
         firstly(execute: gotoNewPortalPage)
             .then(execute: loginNewPortal)
             .then(execute: newPortalLoginVerify)
@@ -43,7 +43,7 @@ extension DUTInfo {
         }
     }
     
-    func newPortalPersonInfo() {
+    public func newPortalPersonInfo() {
         firstly(execute: gotoNewPortalPage)
             .then(execute: loginNewPortal)
             .then(execute: newPortalLoginVerify)

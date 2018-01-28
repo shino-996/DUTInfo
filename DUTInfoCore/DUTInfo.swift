@@ -10,7 +10,7 @@ import PromiseKit
 import Fuzi
 import Foundation
 
-protocol DUTInfoDelegate: AnyObject {
+public protocol DUTInfoDelegate: AnyObject {
     //当DUTInfo属性更改时会调用的委托方法
     func setNetCost(_ netCost: String)
     func setNetFlow(_ netFlow: String)
@@ -24,18 +24,18 @@ protocol DUTInfoDelegate: AnyObject {
 }
 
 //可能会遇到的错误类型
-enum DUTError: Error {
+public enum DUTError: Error {
     case authError
     case evaluateError
 }
 
-class DUTInfo: NSObject {
+public class DUTInfo: NSObject {
     //学号
-    var studentNumber: String
+    public var studentNumber: String
     //教务处密码，默认为身份证号后6位
-    var teachPassword: String
+    public var teachPassword: String
     //校园门户密码，默认为身份证号后6位
-    var portalPassword: String
+    public var portalPassword: String
     
     //用于网络请求的session
     //新版校园门户
@@ -46,43 +46,43 @@ class DUTInfo: NSObject {
     var netSession: URLSession!
     
     //委托对象，用于属性更新时的回调
-    weak var delegate: DUTInfoDelegate?
+    public weak var delegate: DUTInfoDelegate?
         
-    override init() {
+    public override init() {
         studentNumber = ""
         teachPassword = ""
         portalPassword = ""
     }
     
-    init(studentNumber: String, teachPassword: String, portalPassword: String) {
+    public init(studentNumber: String, teachPassword: String, portalPassword: String) {
         self.studentNumber = studentNumber
         self.teachPassword = teachPassword
         self.portalPassword = portalPassword
     }
     
-    var netCost: String! {
+    public var netCost: String! {
         didSet {
             delegate?.setNetCost(netCost)
         }
     }
-    var netFlow: String! {
+    public var netFlow: String! {
         didSet {
             delegate?.setNetFlow(netFlow)
         }
     }
-    var ecardCost: String! {
+    public var ecardCost: String! {
         didSet {
             delegate?.setEcardCost(ecardCost)
         }
     }
     
-    var personName: String! {
+    public var personName: String! {
         didSet {
             delegate?.setPersonName(personName)
         }
     }
     
-    func login(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
+    public func login(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
         loginTeachSite(succeed: {
             self.loginNewPortalSite(succeed: succeed, failed: failed)
         }, failed: failed)

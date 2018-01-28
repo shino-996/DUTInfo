@@ -17,7 +17,7 @@ import PromiseKit
 //接口
 extension DUTInfo {
     //登录验证
-    func loginTeachSite(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
+    public func loginTeachSite(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
         firstly(execute: gotoTeachPage)
             .then(execute: teachLoginVerify)
             .then { (ifLogin: Bool) -> Void in
@@ -30,7 +30,7 @@ extension DUTInfo {
             }
     }
     
-    func courseInfo() {
+    public func courseInfo() {
         firstly(execute: gotoTeachPage)
             .then(execute: teachLoginVerify)
             .then(execute: gotoCoursePage)
@@ -39,7 +39,7 @@ extension DUTInfo {
             .catch(execute: teachErrorHandle)
     }
     
-    func gradeInfo() {
+    public func gradeInfo() {
         firstly(execute: gotoTeachPage)
             .then(execute: teachLoginVerify)
             .then(execute: gotoGradePage)
@@ -47,7 +47,7 @@ extension DUTInfo {
             .catch(execute: teachErrorHandle)
     }
     
-    func testInfo() {
+    public func testInfo() {
         firstly(execute: gotoTeachPage)
             .then(execute: teachLoginVerify)
             .then(execute: gotoTestPage)

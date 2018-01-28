@@ -16,7 +16,7 @@ import PromiseKit
 //接口
 extension DUTInfo {
     //登录验证
-    func loginNetSite(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
+    public func loginNetSite(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
         firstly(execute: gotoNetPage)
             .then(execute: netLoginVerify)
             .then { (isLogin: Bool) -> Void in
@@ -28,7 +28,7 @@ extension DUTInfo {
             }
     }
     
-    func netInfo() {
+    public func netInfo() {
         firstly(execute: gotoNetPage)
             .then(execute: netLoginVerify)
             .then(execute: getNetID)
