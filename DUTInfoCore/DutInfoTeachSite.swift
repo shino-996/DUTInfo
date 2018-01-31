@@ -17,42 +17,78 @@ import PromiseKit
 //接口
 extension DUTInfo {
     //登录验证
-    public func loginTeachSite(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
+    public func loginTeachSite() -> Bool {
+        var value = false
+        let semaphore = DispatchSemaphore(value: 0)
         firstly(execute: gotoTeachPage)
-            .then(execute: teachLoginVerify)
-            .then { (ifLogin: Bool) -> Void in
-                if ifLogin {
-                    succeed()
-                }
-            }.catch { error in
-                print(error)
-                failed()
-            }
+        .then(execute: teachLoginVerify)
+        .then { (isLogin: Bool) -> Void in
+            value = isLogin
+        }.always {
+            semaphore.signal()
+        }.catch { _ in
+            value = false
+        }
+        _ = semaphore.wait(timeout: .distantFuture)
+        return value
     }
     
-    public func courseInfo() {
+    public func courseInfo() -> [[String: String]] {
+        var value = [[String: String]]()
+        let semaphore = DispatchSemaphore(value: 0)
         firstly(execute: gotoTeachPage)
-            .then(execute: teachLoginVerify)
-            .then(execute: gotoCoursePage)
-            .then(execute: evaluateVerify)
-            .then(execute: getCourse)
-            .catch(execute: teachErrorHandle)
+        .then(execute: teachLoginVerify)
+        .then(execute: getCourse)
+        .then(execute: evaluateVerify)
+        .then(execute: parseCourse)
+        .then { (courses: [[String: String]]) -> Void in
+            value = courses
+        }.always {
+            semaphore.signal()
+        }.catch { error in
+            print("teach course error")
+            print(error)
+        }
+        _ = semaphore.wait(timeout: .distantFuture)
+        return value
     }
     
-    public func gradeInfo() {
-        firstly(execute: gotoTeachPage)
-            .then(execute: teachLoginVerify)
-            .then(execute: gotoGradePage)
-            .then(execute: getGrade)
-            .catch(execute: teachErrorHandle)
-    }
+//    public func gradeInfo() -> [[String: String]] {
+//        var value = [[String: String]]()
+//        let semaphore = DispatchSemaphore(value: 0)
+//        firstly(execute: gotoTeachPage)
+//        .then(execute: teachLoginVerify)
+//        .then(execute: getGrade)
+//        .then(execute: parseGrade)
+//        .then { (grades: [[String: String]]) -> Void in
+//            value = grades
+//        }.always {
+//            semaphore.signal()
+//        }.catch { error in
+//            print("teach grade error")
+//            print(error)
+//        }
+//        _ = semaphore.wait(timeout: .distantFuture)
+//        return value
+//    }
     
-    public func testInfo() {
+    public func testInfo() -> [[String: String]] {
+        var value = [[String: String]]()
+        let semaphore = DispatchSemaphore(value: 0)
         firstly(execute: gotoTeachPage)
-            .then(execute: teachLoginVerify)
-            .then(execute: gotoTestPage)
-            .then(execute: getTest)
-            .catch(execute: teachErrorHandle)
+        .then(execute: teachLoginVerify)
+        .then(execute: getTest)
+        .then(execute: parseTest)
+        .then { (tests: [[String: String]]) -> Void in
+            value = tests
+        }.always {
+            semaphore.signal()
+        }.catch { error in
+            print("teach test error")
+            print(error)
+        }
+        _ = semaphore.wait(timeout: .distantFuture)
+        return value
     }
 }
 
@@ -70,7 +106,7 @@ extension Data {
 
 //接口实现
 extension DUTInfo {
-    private func gotoTeachPage() -> URLDataPromise {
+    func gotoTeachPage() -> URLDataPromise {
         let url = URL(string: "http://zhjw.dlut.edu.cn/loginAction.do")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -81,19 +117,24 @@ extension DUTInfo {
     }
     
     //验证是否登录成功
-    private func teachLoginVerify(_ data: Data) throws -> Bool {
+    func teachLoginVerify(_ data: Data) -> Bool {
         let requestStr = data.unicodeString
         let parseStr = try! HTMLDocument(string: requestStr)
         let verifyStr = parseStr.title
-        if verifyStr! != "学分制综合教务" {
+        return verifyStr! == "学分制综合教务"
+    }
+    
+    func teachLoginVerify(_ data: Data) throws {
+        if teachLoginVerify(data) {
+            return
+        } else {
             throw DUTError.authError
         }
-        return true
     }
     
     //查询本学期课程
     //进入本学期选课界面
-    private func gotoCoursePage(_: Bool) -> URLDataPromise {
+    private func getCourse() -> URLDataPromise {
         let url = URL(string: "http://zhjw.dlut.edu.cn/xkAction.do?actionType=6")!
         let request = URLRequest(url: url)
         return teachSession.dataTask(with: request)
@@ -113,7 +154,7 @@ extension DUTInfo {
     }
     
     //解析出各门课程
-    private func getCourse(_ string: String) {
+    private func parseCourse(_ string: String) -> [[String: String]] {
         let parseString = try! HTMLDocument(string: string)
         let courses = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
         var courseData = [[String: String]]()
@@ -148,19 +189,19 @@ extension DUTInfo {
             }
             courseData.append(courseDic)
         }
-        delegate?.setSchedule(courseData)
+        return courseData
     }
     
     //查询本学期成绩
     //进入本学期成绩界面
-    private func gotoGradePage(_: Bool) -> URLDataPromise {
+    private func getGrade() -> URLDataPromise {
         let url = URL(string: "http://zhjw.dlut.edu.cn/bxqcjcxAction.do")!
         let request = URLRequest(url: url)
         return teachSession.dataTask(with: request)
     }
     
     //解析出各科成绩
-    private func getGrade(_ data: Data) {
+    private func parseGrade(_ data: Data) {
         let requestString = data.unicodeString
         let parseString = try! HTMLDocument(string: requestString)
         //找到分数所在的标签
@@ -173,13 +214,13 @@ extension DUTInfo {
     }
 
     //查询考试安排
-    private func gotoTestPage(_: Bool) -> URLDataPromise {
+    private func getTest() -> URLDataPromise {
         let url = URL(string: "http://zhjw.dlut.edu.cn/ksApCxAction.do?oper=getKsapXx")!
         let request = URLRequest(url: url)
         return teachSession.dataTask(with: request)
     }
     // 解析考试信息
-    private func getTest(_ data: Data) {
+    private func parseTest(_ data: Data) -> [[String: String]] {
         let requestString = data.unicodeString
         let parseString = try! HTMLDocument(string: requestString)
         let courses = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
@@ -194,20 +235,6 @@ extension DUTInfo {
             testDic["place"] = item[2].stringValue + " " + item[3].stringValue
             testData.append(testDic)
         }
-        delegate?.setTest(testData)
-    }
-
-    private func teachErrorHandle(_ error: Error) {
-        print(error)
-        if let error = error as? DUTError {
-            if error == .authError {
-                print("教务处用户名或密码错误!")
-            } else if error == .evaluateError {
-                print("教学评估未完成!")
-            }
-        } else {
-            print("其他错误")
-        }
-        delegate?.netErrorHandle(error)
+        return testData
     }
 }

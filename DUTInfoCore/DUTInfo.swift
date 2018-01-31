@@ -18,15 +18,14 @@ public protocol DUTInfoDelegate: AnyObject {
     func setSchedule(_ courseArray: [[String: String]])
     func setTest(_ testArray: [[String : String]])
     func setPersonName(_ personName: String)
-    
-    //当网络异常时会调用的委托方法
-    func netErrorHandle(_ error: Error)
 }
 
 //可能会遇到的错误类型
 public enum DUTError: Error {
     case authError
     case evaluateError
+    case netError
+    case otherError
 }
 
 public class DUTInfo: NSObject {
@@ -80,11 +79,5 @@ public class DUTInfo: NSObject {
         didSet {
             delegate?.setPersonName(personName)
         }
-    }
-    
-    public func login(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
-        loginTeachSite(succeed: {
-            self.loginNewPortalSite(succeed: succeed, failed: failed)
-        }, failed: failed)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  DutInfoNewPortalSite.swift
+//  DutInfoPortalSite.swift
 //  DUTInfomation
 //
 //  Created by shino on 2017/9/25.
@@ -16,49 +16,87 @@ import JavaScriptCore
 
 //接口
 extension DUTInfo {
-    public func loginNewPortalSite(succeed: @escaping () -> Void = {}, failed: @escaping () -> Void = {}) {
-        firstly(execute: gotoNewPortalPage)
-            .then(execute: loginNewPortal)
-            .then(execute: newPortalLoginVerify)
-            .then { (isLogin: Bool) -> Void in
-                if isLogin {
-                    succeed()
-                }
-            }.catch { error in
-                print(error)
-                failed()
-            }
+    public func loginPortal() throws -> Bool {
+        var value = false
+        let semaphore = DispatchSemaphore(value: 0)
+        firstly(execute: gotoPortalPage)
+        .then(execute: portalLogin)
+        .then(execute: portalLoginVerify)
+        .then { (isLogin: Bool) -> Void in
+            value = isLogin
+        }.always {
+            semaphore.signal()
+        }.catch { _ in
+            value = false
+        }
+        _ = semaphore.wait(timeout: .distantFuture)
+        return value
     }
     
-    public func newPortalNetInfo() {
-        firstly(execute: gotoNewPortalPage)
-            .then(execute: loginNewPortal)
-            .then(execute: newPortalLoginVerify)
-            .then(execute: getNewPortalNetInfo)
-            .then(execute: parseNewPortalNetInfo)
-            .then(execute: getNewPortalMoneyInfo)
-            .then(execute: parseNewPortalMoneyInfo)
-            .catch { error in
-                print(error)
+    public func portalNetInfo() -> (netCost: Double, netFlow: Double) {
+        var value = (netFlow: 0.0, netCost: 0.0)
+        let semaphore = DispatchSemaphore(value: 0)
+        firstly(execute: gotoPortalPage)
+        .then(execute: portalLogin)
+        .then(execute: portalLoginVerify)
+        .then(execute: getPortalNetInfo)
+        .then(execute: parsePortalNetInfo)
+        .then { (netInfo: (netCost: Double, netFlow: Double)) -> Void in
+            value = netInfo
+        }.always {
+            semaphore.signal()
+        }.catch { error in
+            print("portal net error")
+            print(error)
         }
+        _ = semaphore.wait(timeout: .distantFuture)
+        return value
     }
     
-    public func newPortalPersonInfo() {
-        firstly(execute: gotoNewPortalPage)
-            .then(execute: loginNewPortal)
-            .then(execute: newPortalLoginVerify)
-            .then(execute: getNewPortalPersonInfo)
-            .then(execute: parseNewPortalPersonInto)
-            .catch { error in
-                print(error)
+    public func portalMoneyInfo() -> Double {
+        var value = 0.0
+        let semaphore = DispatchSemaphore(value: 0)
+        firstly(execute: gotoPortalPage)
+        .then(execute: portalLogin)
+        .then(execute: portalLoginVerify)
+        .then(execute: getPortalMoneyInfo)
+        .then(execute: parsePortalMoneyInfo)
+        .then { (cost: Double) -> Void in
+            value = cost
+        }.always {
+            semaphore.signal()
+        }.catch { error in
+            print("portal money error")
+            print(error)
         }
-        
+        _ = semaphore.wait(timeout: .distantFuture)
+        return value
+    }
+    
+    public func portalPersonInfo() -> String {
+        var value = ""
+        let semaphore = DispatchSemaphore(value: 0)
+        firstly(execute: gotoPortalPage)
+        .then(execute: portalLogin)
+        .then(execute: portalLoginVerify)
+        .then(execute: getPortalPersonInfo)
+        .then(execute: parsePortalPersonInto)
+        .then { (name: String) -> Void in
+            value = name
+        }.always {
+            semaphore.signal()
+        }.catch { error in
+            print("portal person error")
+            print(error)
+        }
+        _ = semaphore.wait(timeout: .distantFuture)
+        return value
     }
 }
 
 //接口实现
 extension DUTInfo {
-    private func gotoNewPortalPage() -> URLDataPromise {
+    func gotoPortalPage() -> URLDataPromise {
         let url = URL(string: "https://sso.dlut.edu.cn/cas/login?service=https%3A%2F%2Fportal.dlut.edu.cn%2Ftp%2F")!
         let request = URLRequest(url: url)
         newPortalSession = URLSession(configuration: .ephemeral)
@@ -66,7 +104,7 @@ extension DUTInfo {
     }
     
     //额……新版的门户登录验证信息用了DES加密，我就直接运行js版的算法，不改成swift了
-    private func desEncode(_ text: String) -> String {
+    func desEncode(_ text: String) -> String {
         guard let jscontext = JSContext() else {
             fatalError()
         }
@@ -85,16 +123,16 @@ extension DUTInfo {
         return encode.toString()
     }
     
-    private func loginNewPortal(_ data: Data) throws -> URLDataPromise {
+    func portalLogin(_ data: Data) throws -> URLDataPromise {
         let parseStr = try! HTMLDocument(data: data)
         let lt_ticket = parseStr.body?.children[0].children[6].attr("value")
         guard let cookieStorage = newPortalSession.configuration.httpCookieStorage else {
-            print("no cookie")
-            throw DUTError.authError
+            print("session中没有cookie")
+            throw DUTError.netError
         }
         guard let cookies = cookieStorage.cookies(for: URL(string: "https://sso.dlut.edu.cn")!) else {
-            print("no cookie array")
-            throw DUTError.authError
+            print("cookie为空")
+            throw DUTError.netError
         }
         var cookieString = "jsessionid="
         for cookie in cookies {
@@ -109,16 +147,12 @@ extension DUTInfo {
         return newPortalSession.dataTask(with: request)
     }
     
-    private func newPortalLoginVerify(_ data: Data) throws -> Bool {
+    private func portalLoginVerify(_ data: Data) -> Bool {
         let verifyStr = String(data: data, encoding: .utf8)!
-        if verifyStr.hasPrefix("<META http-equiv=\"Refresh\" content=\"0; url=") {
-            return true
-        } else {
-            throw DUTError.authError
-        }
+        return verifyStr.hasPrefix("<META http-equiv=\"Refresh\" content=\"0; url=")
     }
     
-    private func newPortalLoginVerify(_ data: Data) throws {
+    private func portalLoginVerify(_ data: Data) throws {
         let verifyStr = String(data: data, encoding: .utf8)!
         if verifyStr.hasPrefix("<META http-equiv=\"Refresh\" content=\"0; url=") {
             return
@@ -127,7 +161,7 @@ extension DUTInfo {
         }
     }
     
-    private func getNewPortalNetInfo() -> URLDataPromise {
+    private func getPortalNetInfo() -> URLDataPromise {
         let url = URL(string: "https://portal.dlut.edu.cn/tp/up/subgroup/getTrafficList")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -136,20 +170,16 @@ extension DUTInfo {
         return newPortalSession.dataTask(with: request)
     }
     
-    private func parseNewPortalNetInfo(_ netInfoData: Data) -> Void {
+    private func parsePortalNetInfo(_ netInfoData: Data) -> (netCost: Double, netFlow: Double) {
         let jsonArray = try! JSONSerialization.jsonObject(with: netInfoData)
                    as! [[String: String]]
         let json = jsonArray[0]
-        netCost = json["fee"]! + "元"
+        let cost = Double(json["fee"]!)!
         let flow = 30720 - Double(json["usedTraffic"]!)!
-        if flow < 1024 {
-            netFlow = "\(flow))MB"
-        } else {
-            netFlow = String(format: "%.1lfGB", flow / 1024)
-        }
+        return (cost, flow)
     }
     
-    private func getNewPortalMoneyInfo() -> URLDataPromise {
+    private func getPortalMoneyInfo() -> URLDataPromise {
         let url = URL(string: "https://portal.dlut.edu.cn/tp/up/subgroup/getCardMoney")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -158,13 +188,14 @@ extension DUTInfo {
         return newPortalSession.dataTask(with: request)
     }
     
-    private func parseNewPortalMoneyInfo(_ moneyInfoData: Data) -> Void {
+    private func parsePortalMoneyInfo(_ moneyInfoData: Data) -> Double {
         let json = try! JSONSerialization.jsonObject(with: moneyInfoData)
                    as! [String: String]
-        ecardCost = json["cardbal"]! + "元"
+        let cost = Double(json["cardbal"]!)!
+        return cost
     }
     
-    private func getNewPortalPersonInfo() -> URLDataPromise {
+    private func getPortalPersonInfo() -> URLDataPromise {
         let url = URL(string: "https://portal.dlut.edu.cn/tp/sys/uacm/profile/getUserById")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -177,21 +208,11 @@ extension DUTInfo {
         return newPortalSession.dataTask(with: request)
     }
     
-    private func parseNewPortalPersonInto(_ personInfoData: Data) -> Void {
+    private func parsePortalPersonInto(_ personInfoData: Data) -> String {
         let json = try! JSONSerialization.jsonObject(with: personInfoData)
                    as! [String: Any]
-        personName = json["USER_NAME"] as! String
+        let name = json["USER_NAME"] as! String
+        return name
     }
-    
-    private func newPortalErrorHandle(_ error: Error) {
-        print(error)
-        if let error = error as? DUTError {
-            if error == .authError {
-                print("新版校园门户用户名或密码错误！")
-            }
-        } else {
-            print("其他错误")
-        }
-        delegate?.netErrorHandle(error)
-    }
+
 }

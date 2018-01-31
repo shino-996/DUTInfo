@@ -8,54 +8,25 @@
 
 import UIKit
 
-class ViewController: UIViewController, DUTInfoDelegate {
+class ViewController: UIViewController {
     var dutInfo: DUTInfo!
     override func viewDidLoad() {
         super.viewDidLoad()
         dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
-        dutInfo.delegate = self
-        dutInfo.loginNewPortalSite(succeed: { [unowned self] in
-            self.dutInfo.newPortalNetInfo()
-        }) {
-            print("error")
+        DispatchQueue.global().async {
+            let (cost, flow) = self.dutInfo.portalNetInfo()
+            let ecard = self.dutInfo.portalMoneyInfo()
+            let name = self.dutInfo.portalPersonInfo()
+            print(cost)
+            print(flow)
+            print(ecard)
+            print(name)
         }
-    }
-    
-    func setNetCost(_ netCost: String) {
-        print(netCost)
-    }
-    
-    func setNetFlow(_ netFlow: String) {
-        print(netFlow)
-    }
-    
-    func setEcardCost(_ ecardCost: String) {
-        print(ecardCost)
-    }
-    
-    func setSchedule(_ courseArray: [[String : String]]) {
-        print(courseArray)
-    }
-    
-    func setTest(_ testArray: [[String : String]]) {
-        print(testArray)
-    }
-    
-    func setPersonName(_ personName: String) {
-        print(personName)
-    }
-    
-    func netErrorHandle(_ error: Error) {
-        print(error)
-        if let error = error as? DUTError {
-            if error == DUTError.authError {
-                print("登录错误")
-            } else if error == DUTError.evaluateError {
-                print("未完成教学评估")
-            }
-        } else {
-            print("网络错误")
+        DispatchQueue.global().async {
+            let course = self.dutInfo.courseInfo()
+            let test = self.dutInfo.testInfo()
+            print(course)
+            print(test)
         }
     }
 }
-
