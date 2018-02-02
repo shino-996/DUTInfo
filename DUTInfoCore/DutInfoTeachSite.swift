@@ -20,15 +20,16 @@ extension DUTInfo {
     public func loginTeachSite() -> Bool {
         var value = false
         let semaphore = DispatchSemaphore(value: 0)
-        firstly(execute: gotoTeachPage)
-        .then(execute: teachLoginVerify)
-        .then { (isLogin: Bool) -> Void in
-            value = isLogin
-        }.always {
-            semaphore.signal()
-        }.catch { _ in
-            value = false
-        }
+        let queue = DispatchQueue(label: "teach.login.promise")
+        firstly(execute: self.gotoTeachPage)
+            .then(on: queue, execute: self.teachLoginVerify)
+            .then(on: queue) { (isLogin: Bool) -> Void in
+                value = isLogin
+            }.always(on: queue) {
+                semaphore.signal()
+            }.catch(on: queue) { _ in
+                value = false
+            }
         _ = semaphore.wait(timeout: .distantFuture)
         return value
     }
@@ -36,16 +37,17 @@ extension DUTInfo {
     public func courseInfo() -> [[String: String]] {
         var value = [[String: String]]()
         let semaphore = DispatchSemaphore(value: 0)
-        firstly(execute: gotoTeachPage)
-        .then(execute: teachLoginVerify)
-        .then(execute: getCourse)
-        .then(execute: evaluateVerify)
-        .then(execute: parseCourse)
-        .then { (courses: [[String: String]]) -> Void in
-            value = courses
-        }.always {
+        let queue = DispatchQueue(label: "teach.course.promise")
+        firstly(execute: self.gotoTeachPage)
+            .then(on: queue, execute: teachLoginVerify)
+            .then(on: queue, execute: getCourse)
+            .then(on: queue, execute: self.evaluateVerify)
+            .then(on: queue, execute: self.parseCourse)
+            .then(on: queue) { (courses: [[String: String]]) -> Void in
+                value = courses
+            }.always(on: queue) {
             semaphore.signal()
-        }.catch { error in
+            }.catch(on: queue) { error in
             print("teach course error")
             print(error)
         }
@@ -56,18 +58,19 @@ extension DUTInfo {
 //    public func gradeInfo() -> [[String: String]] {
 //        var value = [[String: String]]()
 //        let semaphore = DispatchSemaphore(value: 0)
+//        let queue = DispatchQueue(label: "teach.grade.promise")
 //        firstly(execute: gotoTeachPage)
-//        .then(execute: teachLoginVerify)
-//        .then(execute: getGrade)
-//        .then(execute: parseGrade)
-//        .then { (grades: [[String: String]]) -> Void in
-//            value = grades
-//        }.always {
+//            .then(on: queue, execute: teachLoginVerify)
+//            .then(on: queue, execute: getGrade)
+//            .then(execute: parseGrade)
+//            .then(on: queue) { (grades: [[String: String]]) -> Void in
+//                value = grades
+//            }.always(on: queue) {
 //            semaphore.signal()
-//        }.catch { error in
+//            }.catch(on: queue) { error in
 //            print("teach grade error")
 //            print(error)
-//        }
+//            }
 //        _ = semaphore.wait(timeout: .distantFuture)
 //        return value
 //    }
@@ -75,15 +78,16 @@ extension DUTInfo {
     public func testInfo() -> [[String: String]] {
         var value = [[String: String]]()
         let semaphore = DispatchSemaphore(value: 0)
+        let queue = DispatchQueue(label: "test.promise")
         firstly(execute: gotoTeachPage)
-        .then(execute: teachLoginVerify)
-        .then(execute: getTest)
-        .then(execute: parseTest)
-        .then { (tests: [[String: String]]) -> Void in
+            .then(on: queue, execute: teachLoginVerify)
+            .then(on: queue, execute: getTest)
+            .then(on: queue, execute: parseTest)
+            .then(on: queue) { (tests: [[String: String]]) -> Void in
             value = tests
-        }.always {
+            }.always(on: queue) {
             semaphore.signal()
-        }.catch { error in
+            }.catch(on: queue) { error in
             print("teach test error")
             print(error)
         }

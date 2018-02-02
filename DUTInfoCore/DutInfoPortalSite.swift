@@ -19,14 +19,15 @@ extension DUTInfo {
     public func loginPortal() throws -> Bool {
         var value = false
         let semaphore = DispatchSemaphore(value: 0)
+        let queue = DispatchQueue(label: "portal.login.promise")
         firstly(execute: gotoPortalPage)
-        .then(execute: portalLogin)
-        .then(execute: portalLoginVerify)
-        .then { (isLogin: Bool) -> Void in
+            .then(on: queue, execute: portalLogin)
+            .then(on: queue, execute: portalLoginVerify)
+            .then(on: queue) { (isLogin: Bool) -> Void in
             value = isLogin
-        }.always {
+            }.always(on: queue) {
             semaphore.signal()
-        }.catch { _ in
+            }.catch(on: queue) { _ in
             value = false
         }
         _ = semaphore.wait(timeout: .distantFuture)
@@ -36,16 +37,17 @@ extension DUTInfo {
     public func portalNetInfo() -> (netCost: Double, netFlow: Double) {
         var value = (netFlow: 0.0, netCost: 0.0)
         let semaphore = DispatchSemaphore(value: 0)
+        let queue = DispatchQueue(label: "portal.net.promise")
         firstly(execute: gotoPortalPage)
-        .then(execute: portalLogin)
-        .then(execute: portalLoginVerify)
-        .then(execute: getPortalNetInfo)
-        .then(execute: parsePortalNetInfo)
-        .then { (netInfo: (netCost: Double, netFlow: Double)) -> Void in
+            .then(on: queue, execute: portalLogin)
+            .then(on: queue, execute: portalLoginVerify)
+            .then(on: queue, execute: getPortalNetInfo)
+            .then(on: queue, execute: parsePortalNetInfo)
+            .then(on: queue) { (netInfo: (netCost: Double, netFlow: Double)) -> Void in
             value = netInfo
-        }.always {
+            }.always(on: queue) {
             semaphore.signal()
-        }.catch { error in
+            }.catch(on: queue) { error in
             print("portal net error")
             print(error)
         }
@@ -56,16 +58,17 @@ extension DUTInfo {
     public func portalMoneyInfo() -> Double {
         var value = 0.0
         let semaphore = DispatchSemaphore(value: 0)
+        let queue = DispatchQueue(label: "portal.money.promise")
         firstly(execute: gotoPortalPage)
-        .then(execute: portalLogin)
-        .then(execute: portalLoginVerify)
-        .then(execute: getPortalMoneyInfo)
-        .then(execute: parsePortalMoneyInfo)
-        .then { (cost: Double) -> Void in
+            .then(on: queue, execute: portalLogin)
+            .then(on: queue, execute: portalLoginVerify)
+            .then(on: queue, execute: getPortalMoneyInfo)
+            .then(on: queue, execute: parsePortalMoneyInfo)
+            .then(on: queue) { (cost: Double) -> Void in
             value = cost
-        }.always {
+            }.always(on: queue) {
             semaphore.signal()
-        }.catch { error in
+            }.catch(on: queue) { error in
             print("portal money error")
             print(error)
         }
@@ -76,16 +79,17 @@ extension DUTInfo {
     public func portalPersonInfo() -> String {
         var value = ""
         let semaphore = DispatchSemaphore(value: 0)
+        let queue = DispatchQueue(label: "portal.person.promise")
         firstly(execute: gotoPortalPage)
-        .then(execute: portalLogin)
-        .then(execute: portalLoginVerify)
-        .then(execute: getPortalPersonInfo)
-        .then(execute: parsePortalPersonInto)
-        .then { (name: String) -> Void in
+            .then(on: queue, execute: portalLogin)
+            .then(on: queue, execute: portalLoginVerify)
+            .then(on: queue, execute: getPortalPersonInfo)
+            .then(on: queue, execute: parsePortalPersonInto)
+            .then(on: queue) { (name: String) -> Void in
             value = name
-        }.always {
+            }.always(on: queue) {
             semaphore.signal()
-        }.catch { error in
+            }.catch(on: queue) { error in
             print("portal person error")
             print(error)
         }
