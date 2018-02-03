@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  DUTInfomation
+//  DUTInfo
 //
 //  Created by shino on 2017/7/3.
 //  Copyright © 2017年 shino. All rights reserved.
@@ -13,9 +13,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
-        let (cost, flow) = self.dutInfo.portalNetInfo()
-        let ecard = self.dutInfo.portalMoneyInfo()
-        let name = self.dutInfo.portalPersonInfo()
+        let (cost, flow) = self.dutInfo.netInfo()
+        let ecard = self.dutInfo.moneyInfo()
+        let name = self.dutInfo.personInfo()
         print(cost)
         print(flow)
         print(ecard)

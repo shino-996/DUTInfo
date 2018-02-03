@@ -1,6 +1,6 @@
 //
 //  DutInfoPortalSite.swift
-//  DUTInfomation
+//  DUTInfo
 //
 //  Created by shino on 2017/9/25.
 //  Copyright © 2017年 shino. All rights reserved.
@@ -16,6 +16,7 @@ import JavaScriptCore
 
 //接口
 extension DUTInfo {
+    //校园门户登录验证
     public func loginPortal() throws -> Bool {
         var value = false
         let semaphore = DispatchSemaphore(value: 0)
@@ -34,7 +35,8 @@ extension DUTInfo {
         return value
     }
     
-    public func portalNetInfo() -> (netCost: Double, netFlow: Double) {
+    //校园网信息
+    public func netInfo() -> (netCost: Double, netFlow: Double) {
         var value = (netFlow: 0.0, netCost: 0.0)
         let semaphore = DispatchSemaphore(value: 0)
         let queue = DispatchQueue(label: "portal.net.promise")
@@ -55,7 +57,8 @@ extension DUTInfo {
         return value
     }
     
-    public func portalMoneyInfo() -> Double {
+    //玉兰卡余额
+    public func moneyInfo() -> Double {
         var value = 0.0
         let semaphore = DispatchSemaphore(value: 0)
         let queue = DispatchQueue(label: "portal.money.promise")
@@ -76,7 +79,8 @@ extension DUTInfo {
         return value
     }
     
-    public func portalPersonInfo() -> String {
+    //学生姓名
+    public func personInfo() -> String {
         var value = ""
         let semaphore = DispatchSemaphore(value: 0)
         let queue = DispatchQueue(label: "portal.person.promise")
@@ -112,7 +116,7 @@ extension DUTInfo {
         guard let jscontext = JSContext() else {
             fatalError()
         }
-        if let jsPath = Bundle(identifier: "space.shino.DUTInfomation")?.path(forResource: "des", ofType: "js") {
+        if let jsPath = Bundle(identifier: "space.shino.DUTInfo")?.path(forResource: "des", ofType: "js") {
             let jsStr = try! String(contentsOfFile: jsPath)
             _ = jscontext.evaluateScript(jsStr)
         } else {

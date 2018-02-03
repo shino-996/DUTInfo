@@ -1,6 +1,6 @@
 //
 //  DutInfoTeachSite.swift
-//  DUTInfomation
+//  DUTInfo
 //
 //  Created by shino on 2017/9/13.
 //  Copyright © 2017年 shino. All rights reserved.
@@ -34,6 +34,7 @@ extension DUTInfo {
         return value
     }
     
+    //课程信息
     public func courseInfo() -> [[String: String]] {
         var value = [[String: String]]()
         let semaphore = DispatchSemaphore(value: 0)
@@ -75,6 +76,7 @@ extension DUTInfo {
 //        return value
 //    }
     
+    //考试信息
     public func testInfo() -> [[String: String]] {
         var value = [[String: String]]()
         let semaphore = DispatchSemaphore(value: 0)

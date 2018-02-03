@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:DUTInfomation.xcodeproj">
+      location = "self:/Users/shino/Projects/DUTInfo/DUTInfo.xcodeproj">
    </FileRef>
 </Workspace>

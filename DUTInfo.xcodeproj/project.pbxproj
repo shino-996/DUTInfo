@@ -16,13 +16,14 @@
 		B4C9D9371F7A219100717A4E /* DutInfoPortalSite.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C9D9311F7A219100717A4E /* DutInfoPortalSite.swift */; };
 		B4C9D93A1F7A219100717A4E /* DutInfoTeachSite.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C9D9341F7A219100717A4E /* DutInfoTeachSite.swift */; };
 		B4C9D93B1F7A219100717A4E /* des.js in Resources */ = {isa = PBXBuildFile; fileRef = B4C9D9351F7A219100717A4E /* des.js */; };
-		D15B9B88571B6EF5583F1D87 /* Pods_DUTInfomation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA733EC1FDC5F35321DDDEEB /* Pods_DUTInfomation.framework */; };
+		EC9FDA04D3C031D3A396BB4B /* Pods_DUTInfoDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8B37D0AEFB396AF7F66683 /* Pods_DUTInfoDemo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		89DEC4F407A4E6B10D2EDF87 /* Pods-DUTInfomation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DUTInfomation.release.xcconfig"; path = "Pods/Target Support Files/Pods-DUTInfomation/Pods-DUTInfomation.release.xcconfig"; sourceTree = "<group>"; };
-		A2C577CF4047CFE0F0EA4929 /* Pods-DUTInfomation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DUTInfomation.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DUTInfomation/Pods-DUTInfomation.debug.xcconfig"; sourceTree = "<group>"; };
-		B4B70E7B1F0A211800174471 /* DUTInfomation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DUTInfomation.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		53068DE3B8CC38C3067FE8FC /* Pods-DUTInfoDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DUTInfoDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-DUTInfoDemo/Pods-DUTInfoDemo.release.xcconfig"; sourceTree = "<group>"; };
+		5B8B37D0AEFB396AF7F66683 /* Pods_DUTInfoDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DUTInfoDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5D46B1C1E1522AF3B003588 /* Pods-DUTInfoDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DUTInfoDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DUTInfoDemo/Pods-DUTInfoDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		B4B70E7B1F0A211800174471 /* DUTInfoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DUTInfoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4B70E7E1F0A211800174471 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4B70E801F0A211800174471 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B4B70E831F0A211800174471 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -33,7 +34,6 @@
 		B4C9D9311F7A219100717A4E /* DutInfoPortalSite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DutInfoPortalSite.swift; sourceTree = "<group>"; };
 		B4C9D9341F7A219100717A4E /* DutInfoTeachSite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DutInfoTeachSite.swift; sourceTree = "<group>"; };
 		B4C9D9351F7A219100717A4E /* des.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = des.js; sourceTree = "<group>"; };
-		FA733EC1FDC5F35321DDDEEB /* Pods_DUTInfomation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DUTInfomation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,26 +41,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D15B9B88571B6EF5583F1D87 /* Pods_DUTInfomation.framework in Frameworks */,
+				EC9FDA04D3C031D3A396BB4B /* Pods_DUTInfoDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		672C0771219B04B4B7C8E8E1 /* Frameworks */ = {
+		09F646B30F66F32B3C0C3039 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FA733EC1FDC5F35321DDDEEB /* Pods_DUTInfomation.framework */,
+				5B8B37D0AEFB396AF7F66683 /* Pods_DUTInfoDemo.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		87FE56C3B63F9CCFCFF5089C /* Pods */ = {
+		A0A89192FEA412FEAA93532A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A2C577CF4047CFE0F0EA4929 /* Pods-DUTInfomation.debug.xcconfig */,
-				89DEC4F407A4E6B10D2EDF87 /* Pods-DUTInfomation.release.xcconfig */,
+				A5D46B1C1E1522AF3B003588 /* Pods-DUTInfoDemo.debug.xcconfig */,
+				53068DE3B8CC38C3067FE8FC /* Pods-DUTInfoDemo.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -69,22 +69,22 @@
 			isa = PBXGroup;
 			children = (
 				B4C9D93C1F7A21A700717A4E /* DUTInfoCore */,
-				B4B70E7D1F0A211800174471 /* DUTInfomation */,
+				B4B70E7D1F0A211800174471 /* DUTInfoDemo */,
 				B4B70E7C1F0A211800174471 /* Products */,
-				87FE56C3B63F9CCFCFF5089C /* Pods */,
-				672C0771219B04B4B7C8E8E1 /* Frameworks */,
+				A0A89192FEA412FEAA93532A /* Pods */,
+				09F646B30F66F32B3C0C3039 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		B4B70E7C1F0A211800174471 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B4B70E7B1F0A211800174471 /* DUTInfomation.app */,
+				B4B70E7B1F0A211800174471 /* DUTInfoDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B4B70E7D1F0A211800174471 /* DUTInfomation */ = {
+		B4B70E7D1F0A211800174471 /* DUTInfoDemo */ = {
 			isa = PBXGroup;
 			children = (
 				B4B70E7E1F0A211800174471 /* AppDelegate.swift */,
@@ -94,7 +94,7 @@
 				B4B70E871F0A211800174471 /* LaunchScreen.storyboard */,
 				B4B70E8A1F0A211800174471 /* Info.plist */,
 			);
-			path = DUTInfomation;
+			path = DUTInfoDemo;
 			sourceTree = "<group>";
 		};
 		B4C9D93C1F7A21A700717A4E /* DUTInfoCore */ = {
@@ -111,24 +111,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B4B70E7A1F0A211800174471 /* DUTInfomation */ = {
+		B4B70E7A1F0A211800174471 /* DUTInfoDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B4B70E8D1F0A211800174471 /* Build configuration list for PBXNativeTarget "DUTInfomation" */;
+			buildConfigurationList = B4B70E8D1F0A211800174471 /* Build configuration list for PBXNativeTarget "DUTInfoDemo" */;
 			buildPhases = (
-				F9F118B755677D69F50C1C20 /* [CP] Check Pods Manifest.lock */,
+				0F65109C6FEE46E6B99AB6A5 /* [CP] Check Pods Manifest.lock */,
 				B4B70E771F0A211800174471 /* Sources */,
 				B4B70E781F0A211800174471 /* Frameworks */,
 				B4B70E791F0A211800174471 /* Resources */,
-				CFF1EFBE4AFF4B9A4EDD733A /* [CP] Embed Pods Frameworks */,
-				263F24AE1BF0BC5C836F6AE2 /* [CP] Copy Pods Resources */,
+				EF46593D88B0BED0045E1691 /* [CP] Embed Pods Frameworks */,
+				BB97A079A003750FB6BDFA26 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = DUTInfomation;
+			name = DUTInfoDemo;
 			productName = DUTInfomation;
-			productReference = B4B70E7B1F0A211800174471 /* DUTInfomation.app */;
+			productReference = B4B70E7B1F0A211800174471 /* DUTInfoDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -149,7 +149,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B4B70E761F0A211800174471 /* Build configuration list for PBXProject "DUTInfomation" */;
+			buildConfigurationList = B4B70E761F0A211800174471 /* Build configuration list for PBXProject "DUTInfo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -162,7 +162,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B4B70E7A1F0A211800174471 /* DUTInfomation */,
+				B4B70E7A1F0A211800174471 /* DUTInfoDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -182,7 +182,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		263F24AE1BF0BC5C836F6AE2 /* [CP] Copy Pods Resources */ = {
+		0F65109C6FEE46E6B99AB6A5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DUTInfoDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BB97A079A003750FB6BDFA26 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -194,16 +212,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DUTInfomation/Pods-DUTInfomation-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DUTInfoDemo/Pods-DUTInfoDemo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CFF1EFBE4AFF4B9A4EDD733A /* [CP] Embed Pods Frameworks */ = {
+		EF46593D88B0BED0045E1691 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-DUTInfomation/Pods-DUTInfomation-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-DUTInfoDemo/Pods-DUTInfoDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Fuzi/Fuzi.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 			);
@@ -214,25 +232,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DUTInfomation/Pods-DUTInfomation-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F9F118B755677D69F50C1C20 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-DUTInfomation-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DUTInfoDemo/Pods-DUTInfoDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -319,7 +319,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -369,7 +369,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -379,15 +379,15 @@
 		};
 		B4B70E8E1F0A211800174471 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A2C577CF4047CFE0F0EA4929 /* Pods-DUTInfomation.debug.xcconfig */;
+			baseConfigurationReference = A5D46B1C1E1522AF3B003588 /* Pods-DUTInfoDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = R374EG3MSW;
-				INFOPLIST_FILE = DUTInfomation/Info.plist;
+				INFOPLIST_FILE = DUTInfoDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = space.shino.DUTInfomation;
+				PRODUCT_BUNDLE_IDENTIFIER = space.shino.DUTInfo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
@@ -398,15 +398,15 @@
 		};
 		B4B70E8F1F0A211800174471 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89DEC4F407A4E6B10D2EDF87 /* Pods-DUTInfomation.release.xcconfig */;
+			baseConfigurationReference = 53068DE3B8CC38C3067FE8FC /* Pods-DUTInfoDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = R374EG3MSW;
-				INFOPLIST_FILE = DUTInfomation/Info.plist;
+				INFOPLIST_FILE = DUTInfoDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = space.shino.DUTInfomation;
+				PRODUCT_BUNDLE_IDENTIFIER = space.shino.DUTInfo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				SWIFT_VERSION = 4.0;
@@ -417,7 +417,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B4B70E761F0A211800174471 /* Build configuration list for PBXProject "DUTInfomation" */ = {
+		B4B70E761F0A211800174471 /* Build configuration list for PBXProject "DUTInfo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B4B70E8B1F0A211800174471 /* Debug */,
@@ -426,7 +426,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B4B70E8D1F0A211800174471 /* Build configuration list for PBXNativeTarget "DUTInfomation" */ = {
+		B4B70E8D1F0A211800174471 /* Build configuration list for PBXNativeTarget "DUTInfoDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B4B70E8E1F0A211800174471 /* Debug */,

@@ -1,6 +1,6 @@
 //
 //  TeachInfo.swift
-//  DUTInfomation
+//  DUTInfo
 //
 //  Created by shino on 2017/7/3.
 //  Copyright © 2017年 shino. All rights reserved.

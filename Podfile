@@ -1,6 +1,6 @@
 platform :ios, '9.0'
 
-target 'DUTInfomation' do
+target 'DUTInfoDemo' do
   use_frameworks!
   swift_version = "4.0"
 
