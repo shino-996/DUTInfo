@@ -116,7 +116,7 @@ extension DUTInfo {
         guard let jscontext = JSContext() else {
             fatalError()
         }
-        if let jsPath = Bundle(identifier: "space.shino.DUTInfo")?.path(forResource: "des", ofType: "js") {
+        if let jsPath = Bundle(for: type(of: self)).path(forResource: "des", ofType: "js") {
             let jsStr = try! String(contentsOfFile: jsPath)
             _ = jscontext.evaluateScript(jsStr)
         } else {
