@@ -18,7 +18,7 @@ public enum DUTError: Error {
     case otherError
 }
 
-public struct DUTInfo {
+public class DUTInfo: NSObject {
     //学号
     public var studentNumber: String
     //教务处密码，默认为身份证号后6位
