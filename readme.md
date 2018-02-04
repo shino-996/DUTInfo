@@ -1,7 +1,5 @@
 大连理工大学相关校园网站信息的抓取，swift 4 编写，使用了 PromiseKit 进行异步调用，以及 Fuzi 解析 HTML.
 
-> 因为旧版校园门户已停用, 课程信息只可以从教务处上获取本学期课表, 导入课表功能只能在校园网环境下使用.
-
 # 可以抓到的信息
 
 - 本学期课程表
@@ -14,10 +12,7 @@
 
 - [教务处][teach]（校园网访问）
 
-- [新版校园门户][new_portal]（外网可访问）
-
-- [校园网][net]（校园网访问）
-
+- [校园门户][portal]（外网可访问）
 
 # 账户和密码
 
@@ -35,8 +30,19 @@
 
 # 使用方法
 
-因为异步再加上 swift 的 KVO 还不大会用，都是用委托传值，可以看 ViewController 中的使用
+目前还没有提交到 cocoapod, 所以需要在 pod 后面额外添加本项目 github 地址, 比如:
+
+``` ruby
+platform :ios, '9.0'
+use_frameworks!
+swift_version = '4.0'
+
+target 'DUTInfoDemo' do
+  pod 'DUTInfo', :git => 'https://github.com/shino-996/DUTInfo.git'
+end
+```
+
+因为项目本身使用 [Fuzi][fuzi] 和 [PromiseKit][promisekit] 开发, 安装此 pod 同时也会安装这两个 pod.
 
 [teach]: http://zhjw.dlut.edu.cn
-[new_portal]: http://portal.dlut.edu.cn
-[net]: http://tulip.dlut.edu.cn
+[portal]: http://portal.dlut.edu.cn
