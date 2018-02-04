@@ -45,4 +45,6 @@ end
 因为项目本身使用 [Fuzi][fuzi] 和 [PromiseKit][promisekit] 开发, 安装此 pod 同时也会安装这两个 pod.
 
 [teach]: http://zhjw.dlut.edu.cn
-[portal]: http://portal.dlut.edu.cn
+[portal]: https://portal.dlut.edu.cn
+[fuzi]: https://github.com/cezheng/Fuzi
+[promisekit]: https://github.com/mxcl/PromiseKit
