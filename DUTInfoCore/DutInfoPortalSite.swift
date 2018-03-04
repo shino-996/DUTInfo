@@ -112,7 +112,10 @@ extension DUTInfo {
     }
     
     //额……新版的门户登录验证信息用了DES加密，我就直接运行js版的算法，不改成swift了
-    func desEncode(_ text: String) -> String {
+    func desEncode(_ text: String,
+                   _ para_1: String = "1",
+                   _ para_2: String = "2",
+                   _ para_3: String = "3") -> String {
         guard let jscontext = JSContext() else {
             fatalError()
         }
@@ -125,7 +128,7 @@ extension DUTInfo {
         guard let jsFunc = jscontext.objectForKeyedSubscript("strEnc") else {
             fatalError()
         }
-        guard let encode = jsFunc.call(withArguments: [text, "1", "2", "3"]) else {
+        guard let encode = jsFunc.call(withArguments: [text, para_1, para_2, para_3]) else {
             fatalError()
         }
         return encode.toString()
@@ -208,9 +211,10 @@ extension DUTInfo {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        let studentNumber = desEncode(self.studentNumber, "tp", "des", "param")
         request.httpBody = """
         {
-            "ID_NUMBER": "\(self.studentNumber)"
+            "ID_NUMBER": "\(studentNumber)"
         }
         """.data(using: .utf8)
         return newPortalSession.dataTask(with: request)
