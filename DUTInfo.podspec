@@ -134,6 +134,6 @@ Pod::Spec.new do |s|
 
   s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   s.dependency "Fuzi"
-  s.dependency "PromiseKit"
+  s.dependency "PromiseKit", "~> 4"
 
 end
