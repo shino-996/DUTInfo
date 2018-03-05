@@ -47,11 +47,11 @@ extension DUTInfo {
             .then(on: queue) { (courses: [[String: String]]) -> Void in
                 value = courses
             }.always(on: queue) {
-            semaphore.signal()
+                semaphore.signal()
             }.catch(on: queue) { error in
-            print("teach course error")
-            print(error)
-        }
+                print("teach course error")
+                print(error)
+            }
         _ = semaphore.wait(timeout: .distantFuture)
         return value
     }
@@ -86,13 +86,13 @@ extension DUTInfo {
             .then(on: queue, execute: getTest)
             .then(on: queue, execute: parseTest)
             .then(on: queue) { (tests: [[String: String]]) -> Void in
-            value = tests
+                value = tests
             }.always(on: queue) {
-            semaphore.signal()
+                semaphore.signal()
             }.catch(on: queue) { error in
-            print("teach test error")
-            print(error)
-        }
+                print("teach test error")
+                print(error)
+            }
         _ = semaphore.wait(timeout: .distantFuture)
         return value
     }

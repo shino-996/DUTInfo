@@ -32,7 +32,9 @@ public class DUTInfo: NSObject {
     //教务处
     var teachSession: URLSession!
     
-    public init(studentNumber: String, teachPassword: String, portalPassword: String) {
+    public init(studentNumber: String = "",
+                teachPassword: String = "",
+                portalPassword: String = "") {
         self.studentNumber = studentNumber
         self.teachPassword = teachPassword
         self.portalPassword = portalPassword

@@ -17,7 +17,7 @@ import JavaScriptCore
 //接口
 extension DUTInfo {
     //校园门户登录验证
-    public func loginPortal() throws -> Bool {
+    public func loginPortal() -> Bool {
         var value = false
         let semaphore = DispatchSemaphore(value: 0)
         let queue = DispatchQueue(label: "portal.login.promise")
@@ -25,12 +25,12 @@ extension DUTInfo {
             .then(on: queue, execute: portalLogin)
             .then(on: queue, execute: portalLoginVerify)
             .then(on: queue) { (isLogin: Bool) -> Void in
-            value = isLogin
+                value = isLogin
             }.always(on: queue) {
-            semaphore.signal()
+                semaphore.signal()
             }.catch(on: queue) { _ in
-            value = false
-        }
+                value = false
+            }
         _ = semaphore.wait(timeout: .distantFuture)
         return value
     }
@@ -46,13 +46,13 @@ extension DUTInfo {
             .then(on: queue, execute: getPortalNetInfo)
             .then(on: queue, execute: parsePortalNetInfo)
             .then(on: queue) { (netInfo: (netCost: Double, netFlow: Double)) -> Void in
-            value = netInfo
+                value = netInfo
             }.always(on: queue) {
-            semaphore.signal()
+                semaphore.signal()
             }.catch(on: queue) { error in
-            print("portal net error")
-            print(error)
-        }
+                print("portal net error")
+                print(error)
+            }
         _ = semaphore.wait(timeout: .distantFuture)
         return value
     }
@@ -68,13 +68,13 @@ extension DUTInfo {
             .then(on: queue, execute: getPortalMoneyInfo)
             .then(on: queue, execute: parsePortalMoneyInfo)
             .then(on: queue) { (cost: Double) -> Void in
-            value = cost
+                value = cost
             }.always(on: queue) {
-            semaphore.signal()
+                semaphore.signal()
             }.catch(on: queue) { error in
-            print("portal money error")
-            print(error)
-        }
+                print("portal money error")
+                print(error)
+            }
         _ = semaphore.wait(timeout: .distantFuture)
         return value
     }
@@ -90,13 +90,13 @@ extension DUTInfo {
             .then(on: queue, execute: getPortalPersonInfo)
             .then(on: queue, execute: parsePortalPersonInto)
             .then(on: queue) { (name: String) -> Void in
-            value = name
+                value = name
             }.always(on: queue) {
-            semaphore.signal()
+                semaphore.signal()
             }.catch(on: queue) { error in
-            print("portal person error")
-            print(error)
-        }
+                print("portal person error")
+                print(error)
+            }
         _ = semaphore.wait(timeout: .distantFuture)
         return value
     }

@@ -13,16 +13,20 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
-        let (cost, flow) = self.dutInfo.netInfo()
-        let ecard = self.dutInfo.moneyInfo()
-        let name = self.dutInfo.personInfo()
-        print(cost)
-        print(flow)
-        print(ecard)
-        print(name)
-        let course = self.dutInfo.courseInfo()
-        let test = self.dutInfo.testInfo()
-        print(course)
-        print(test)
+        if dutInfo.loginPortal() {
+            let (cost, flow) = self.dutInfo.netInfo()
+            let ecard = self.dutInfo.moneyInfo()
+            let name = self.dutInfo.personInfo()
+            print(cost)
+            print(flow)
+            print(ecard)
+            print(name)
+        }
+        if dutInfo.loginTeachSite() {
+            let course = self.dutInfo.courseInfo()
+            let test = self.dutInfo.testInfo()
+            print(course)
+            print(test)
+        }
     }
 }
