@@ -14,19 +14,24 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
         if dutInfo.loginPortal() {
-            let (cost, flow) = self.dutInfo.netInfo()
-            let ecard = self.dutInfo.moneyInfo()
-            let name = self.dutInfo.personInfo()
-            print(cost)
-            print(flow)
-            print(ecard)
-            print(name)
+            if let (cost, flow) = self.dutInfo.netInfo() {
+                print(cost)
+                print(flow)
+            }
+            if let ecard = self.dutInfo.moneyInfo() {
+                print(ecard)
+            }
+            if let name = self.dutInfo.personInfo() {
+                print(name)
+            }
         }
         if dutInfo.loginTeachSite() {
-            let course = self.dutInfo.courseInfo()
-            let test = self.dutInfo.testInfo()
-            print(course)
-            print(test)
+            if let course = self.dutInfo.courseInfo() {
+                print(course)
+            }
+            if let test = self.dutInfo.testInfo() {
+                print(test)
+            }
         }
     }
 }
