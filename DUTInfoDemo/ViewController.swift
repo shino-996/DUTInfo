@@ -8,6 +8,33 @@
 
 import UIKit
 
+struct Course: CourseType {
+    typealias TimeType = Time
+    var name: String
+    var teacher: String
+    var time: [Time]
+    init() {
+        name = ""
+        teacher = ""
+        time = []
+    }
+}
+
+struct Time: CourseTimeType {
+    var place: String
+    var startSection: Int
+    var endSection: Int
+    var week: Int
+    var teachWeek: [Int]
+    init() {
+        place = ""
+        startSection = 0
+        endSection = 0
+        week = 0
+        teachWeek = []
+    }
+}
+
 class ViewController: UIViewController {
     var dutInfo: DUTInfo!
     override func viewDidLoad() {
@@ -26,7 +53,7 @@ class ViewController: UIViewController {
             }
         }
         if dutInfo.loginTeachSite() {
-            if let course = self.dutInfo.courseInfo() {
+            if let course: [Course]  = self.dutInfo.courseInfo() {
                 print(course)
             }
             if let test = self.dutInfo.testInfo() {

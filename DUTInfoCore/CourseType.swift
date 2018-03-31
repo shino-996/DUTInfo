@@ -8,28 +8,19 @@
 
 import Foundation
 
-public struct CourseType {
-    public var name: String
-    public var teacher: String
-    public var time: [CourseTimeType]
-    public init() {
-        name = ""
-        teacher = ""
-        time = []
-    }
+public protocol CourseType {
+    associatedtype TimeType: CourseTimeType
+    var name: String { get set }
+    var teacher: String { get set }
+    var time: [TimeType] { get set }
+    init()
 }
 
-public struct CourseTimeType {
-    public var place: String
-    public var startSection: Int
-    public var endSection: Int
-    public var week: Int
-    public var teachWeek: [Int]
-    public init() {
-        place = ""
-        startSection = 0
-        endSection = 0
-        week = 0
-        teachWeek = []
-    }
+public protocol CourseTimeType {
+    var place: String { get set }
+    var startSection: Int { get set }
+    var endSection: Int { get set }
+    var week: Int { get set }
+    var teachWeek: [Int] { get set }
+    init()
 }

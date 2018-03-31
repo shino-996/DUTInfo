@@ -35,8 +35,8 @@ extension DUTInfo {
     }
     
     //课程信息
-    public func courseInfo() -> [CourseType]? {
-        var value: [CourseType]?
+    public func courseInfo<C: CourseType>() -> [C]? {
+        var value: [C]?
         let semaphore = DispatchSemaphore(value: 0)
         let queue = DispatchQueue(label: "teach.course.promise")
         firstly(execute: self.gotoTeachPage)
@@ -44,7 +44,7 @@ extension DUTInfo {
             .then(on: queue, execute: getCourse)
             .then(on: queue, execute: self.evaluateVerify)
             .then(on: queue, execute: self.parseCourse)
-            .then(on: queue) { (courses: [CourseType]) -> Void in
+            .then(on: queue) { (courses: [C]) -> Void in
                 value = courses
             }.always(on: queue) {
                 semaphore.signal()
@@ -160,19 +160,19 @@ extension DUTInfo {
     }
     
     //解析出各门课程
-    private func parseCourse(_ string: String) -> [CourseType] {
+    private func parseCourse<C: CourseType>(_ string: String) -> [C] {
         let parseString = try! HTMLDocument(string: string)
         let courseSource = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
-        var courses = [CourseType]()
+        var courses = [C]()
         for courseData in courseSource {
             let items = courseData.xpath("./td")
             if items.count > 7 {
-                var course = CourseType()
+                var course = C()
                 course.name = items[2].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 course.teacher = items[7].stringValue
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0 != "*"}
-                var courseTime = CourseTimeType()
+                var courseTime = C.TimeType()
                 let teachWeeks = items[11].stringValue
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
@@ -194,7 +194,7 @@ extension DUTInfo {
                 course.time.append(courseTime)
                 courses.append(course)
             } else {
-                var courseTime = CourseTimeType()
+                var courseTime = C.TimeType()
                 let teachWeeks = items[0].stringValue
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
