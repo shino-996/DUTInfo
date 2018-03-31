@@ -9,15 +9,27 @@
 import Foundation
 
 public struct CourseType {
-    var name: String = ""
-    var teacher: String = ""
-    var time: [CourseTimeType] = [CourseTimeType]()
+    public var name: String
+    public var teacher: String
+    public var time: [CourseTimeType]
+    public init() {
+        name = ""
+        teacher = ""
+        time = []
+    }
 }
 
 public struct CourseTimeType {
-    var place: String = ""
-    var startSection: Int = 0
-    var endSection: Int = 0
-    var week: Int = 0
-    var teachWeek: [Int] = [Int]()
+    public var place: String
+    public var startSection: Int
+    public var endSection: Int
+    public var week: Int
+    public var teachWeek: [Int]
+    public init() {
+        place = ""
+        startSection = 0
+        endSection = 0
+        week = 0
+        teachWeek = []
+    }
 }
