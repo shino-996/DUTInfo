@@ -167,12 +167,12 @@ extension DUTInfo {
         for courseData in courseSource {
             let items = courseData.xpath("./td")
             if items.count > 7 {
-                var course = C()
+                var course = C(name: "", teacher: "", time: [])
                 course.name = items[2].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 course.teacher = items[7].stringValue
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0 != "*"}
-                var courseTime = C.TimeType()
+                var courseTime = C.TimeType(place: "", startSection: 0, endSection: 0, week: 0, teachWeek: [])
                 let teachWeeks = items[11].stringValue
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
@@ -194,7 +194,7 @@ extension DUTInfo {
                 course.time.append(courseTime)
                 courses.append(course)
             } else {
-                var courseTime = C.TimeType()
+                var courseTime = C.TimeType(place: "", startSection: 0, endSection: 0, week: 0, teachWeek: [])
                 let teachWeeks = items[0].stringValue
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0.unicodeScalars.first?.value ?? 128 < 128}

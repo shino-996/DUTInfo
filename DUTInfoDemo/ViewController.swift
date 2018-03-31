@@ -13,11 +13,6 @@ struct Course: CourseType {
     var name: String
     var teacher: String
     var time: [Time]
-    init() {
-        name = ""
-        teacher = ""
-        time = []
-    }
 }
 
 struct Time: CourseTimeType {
@@ -26,13 +21,6 @@ struct Time: CourseTimeType {
     var endSection: Int
     var week: Int
     var teachWeek: [Int]
-    init() {
-        place = ""
-        startSection = 0
-        endSection = 0
-        week = 0
-        teachWeek = []
-    }
 }
 
 class ViewController: UIViewController {

@@ -13,7 +13,7 @@ public protocol CourseType {
     var name: String { get set }
     var teacher: String { get set }
     var time: [TimeType] { get set }
-    init()
+    init(name: String, teacher: String, time: [TimeType])
 }
 
 public protocol CourseTimeType {
@@ -22,5 +22,5 @@ public protocol CourseTimeType {
     var endSection: Int { get set }
     var week: Int { get set }
     var teachWeek: [Int] { get set }
-    init()
+    init(place: String, startSection: Int, endSection: Int, week: Int, teachWeek: [Int])
 }
