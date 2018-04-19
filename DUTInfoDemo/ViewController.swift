@@ -8,21 +8,6 @@
 
 import UIKit
 
-struct Course: CourseType {
-    typealias TimeType = Time
-    var name: String
-    var teacher: String
-    var time: [Time]
-}
-
-struct Time: CourseTimeType {
-    var place: String
-    var startSection: Int
-    var endSection: Int
-    var week: Int
-    var teachWeek: [Int]
-}
-
 class ViewController: UIViewController {
     var dutInfo: DUTInfo!
     override func viewDidLoad() {

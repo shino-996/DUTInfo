@@ -35,8 +35,8 @@ extension DUTInfo {
     }
     
     //课程信息
-    public func courseInfo<C: CourseType>() -> [C]? {
-        var value: [C]?
+    public func courseInfo() -> [Course]? {
+        var value: [Course]?
         let semaphore = DispatchSemaphore(value: 0)
         let queue = DispatchQueue(label: "teach.course.promise")
         firstly(execute: self.gotoTeachPage)
@@ -44,7 +44,7 @@ extension DUTInfo {
             .then(on: queue, execute: getCourse)
             .then(on: queue, execute: self.evaluateVerify)
             .then(on: queue, execute: self.parseCourse)
-            .then(on: queue) { (courses: [C]) -> Void in
+            .then(on: queue) { (courses: [Course]) -> Void in
                 value = courses
             }.always(on: queue) {
                 semaphore.signal()
@@ -160,61 +160,69 @@ extension DUTInfo {
     }
     
     //解析出各门课程
-    private func parseCourse<C: CourseType>(_ string: String) -> [C] {
+    private func parseCourse(_ string: String) -> [Course] {
         let parseString = try! HTMLDocument(string: string)
         let courseSource = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
-        var courses = [C]()
+        var courses = [Course]()
         for courseData in courseSource {
             let items = courseData.xpath("./td")
             if items.count > 7 {
-                var course = C(name: "", teacher: "", time: [])
+                var course = Course(name: "", teacher: "", time: nil)
                 course.name = items[2].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 course.teacher = items[7].stringValue
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0 != "*"}
-                var courseTime = C.TimeType(place: "", startSection: 0, endSection: 0, week: 0, teachWeek: [])
                 let teachWeeks = items[11].stringValue
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
                     .split(separator: "-")
                 if teachWeeks.count == 0 {
+                    courses.append(course)
                     continue
                 }
+                var courseTime = Time(place: "", startsection: 0, endsection: 0, week: 0, teachweek: [])
                 let startTeachWeek = Int(teachWeeks.first!)!
                 let endTeachWeek = Int(teachWeeks.last!)!
                 for i in startTeachWeek ... endTeachWeek {
-                    courseTime.teachWeek.append(i)
+                    courseTime.teachweek.append(i)
                 }
                 courseTime.week = Int(items[12].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
-                courseTime.startSection = Int(items[13].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
-                courseTime.endSection = courseTime.startSection - 1 +  Int(items[14].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
+                courseTime.startsection = Int(items[13].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
+                courseTime.endsection = courseTime.startsection - 1 +  Int(items[14].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
                 courseTime.place = items[16].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
                     + " "
                     + items[17].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                course.time.append(courseTime)
+                if course.time == nil {
+                    course.time = []
+                }
+                course.time!.append(courseTime)
                 courses.append(course)
             } else {
-                var courseTime = C.TimeType(place: "", startSection: 0, endSection: 0, week: 0, teachWeek: [])
+                var course = courses.popLast()!
                 let teachWeeks = items[0].stringValue
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
                     .split(separator: "-")
                 if teachWeeks.count == 0 {
+                    courses.append(course)
                     continue
                 }
+                var courseTime = Time(place: "", startsection: 0, endsection: 0, week: 0, teachweek: [])
                 let startTeachWeek = Int(teachWeeks.first!)!
                 let endTeachWeek = Int(teachWeeks.last!)!
                 for i in startTeachWeek ... endTeachWeek {
-                    courseTime.teachWeek.append(i)
+                    courseTime.teachweek.append(i)
                 }
                 courseTime.week = Int(items[1].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
-                courseTime.startSection = Int(items[2].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
-                courseTime.endSection = courseTime.startSection - 1 + Int(items[3].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
+                courseTime.startsection = Int(items[2].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
+                courseTime.endsection = courseTime.startsection - 1 + Int(items[3].stringValue.trimmingCharacters(in: .whitespacesAndNewlines))!
                 courseTime.place = items[5].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
                     + " "
                     + items[6].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                var course = courses.popLast()!
-                course.time.append(courseTime)
+                if course.time == nil {
+                    course.time = []
+                }
+                course.time!.append(courseTime)
                 courses.append(course)
             }
         }
