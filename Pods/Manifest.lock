@@ -13,13 +13,18 @@ PODS:
     - PromiseKit/CorePromise
 
 DEPENDENCIES:
-  - Fuzi
-  - PromiseKit
+  - Fuzi (= 2.0.1)
+  - PromiseKit (~> 4)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Fuzi
+    - PromiseKit
 
 SPEC CHECKSUMS:
   Fuzi: f64983dea705491d3aedd32351247a09523e7efd
   PromiseKit: 743e497a5f505a470d3bbbf4ce0663c1268af0a4
 
-PODFILE CHECKSUM: 7557ea83147fa3c624db396825406002d039c2e6
+PODFILE CHECKSUM: c17a835e149da6c4b19efdcf227a78b028789358
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0

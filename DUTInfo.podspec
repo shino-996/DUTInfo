@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "DUTInfo"
-  s.version      = "0.1.7"
+  s.version      = "0.1.8"
   s.summary      = "大连理工大学学生相关信息的查询"
 
   # This description is used to generate tags and improve search results.
@@ -132,7 +132,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.dependency "Fuzi"
+  s.dependency "Fuzi", "2.0.1"
   s.dependency "PromiseKit", "~> 4"
 
 end
