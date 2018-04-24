@@ -27,7 +27,12 @@ class ViewController: UIViewController {
         }
         if dutInfo.loginTeachSite() {
             if let course: [Course]  = self.dutInfo.courseInfo() {
-                print(course)
+                _ = course.map { course in
+                    let encoder = JSONEncoder()
+                    let jsonData = try! encoder.encode(course)
+                    let json = String(data: jsonData, encoding: .utf8)!
+                    print(json)
+                }
             }
             if let test = self.dutInfo.testInfo() {
                 print(test)
