@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         dutInfo = DUTInfo(studentNumber: "学号", teachPassword: "教务处密码", portalPassword: "校园门户密码")
+        print(dutInfo.openLibraryInfo() ?? "")
         if dutInfo.loginPortal() {
             if let (cost, flow) = self.dutInfo.netInfo() {
                 print(cost)

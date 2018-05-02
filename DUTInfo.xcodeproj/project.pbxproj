@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B441503C2099C5D800DC73F9 /* DUTInfoLibrarySite.swift in Sources */ = {isa = PBXBuildFile; fileRef = B441503B2099C5D800DC73F9 /* DUTInfoLibrarySite.swift */; };
 		B44FF1712069158C00C274C4 /* CourseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44FF1702069158C00C274C4 /* CourseType.swift */; };
 		B48AD34020524CC200EC0D5E /* DES.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48AD33F20524CC200EC0D5E /* DES.swift */; };
 		B4B70E7F1F0A211800174471 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B70E7E1F0A211800174471 /* AppDelegate.swift */; };
@@ -24,6 +25,7 @@
 		53068DE3B8CC38C3067FE8FC /* Pods-DUTInfoDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DUTInfoDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-DUTInfoDemo/Pods-DUTInfoDemo.release.xcconfig"; sourceTree = "<group>"; };
 		5B8B37D0AEFB396AF7F66683 /* Pods_DUTInfoDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DUTInfoDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5D46B1C1E1522AF3B003588 /* Pods-DUTInfoDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DUTInfoDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DUTInfoDemo/Pods-DUTInfoDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		B441503B2099C5D800DC73F9 /* DUTInfoLibrarySite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DUTInfoLibrarySite.swift; sourceTree = "<group>"; };
 		B44FF1702069158C00C274C4 /* CourseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseType.swift; sourceTree = "<group>"; };
 		B48AD33F20524CC200EC0D5E /* DES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DES.swift; sourceTree = "<group>"; };
 		B4B70E7B1F0A211800174471 /* DUTInfoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DUTInfoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +107,7 @@
 				B4B70E901F0A25A500174471 /* DUTInfo.swift */,
 				B4C9D9311F7A219100717A4E /* DutInfoPortalSite.swift */,
 				B4C9D9341F7A219100717A4E /* DutInfoTeachSite.swift */,
+				B441503B2099C5D800DC73F9 /* DUTInfoLibrarySite.swift */,
 				B44FF1702069158C00C274C4 /* CourseType.swift */,
 				B48AD33F20524CC200EC0D5E /* DES.swift */,
 			);
@@ -234,6 +237,7 @@
 				B44FF1712069158C00C274C4 /* CourseType.swift in Sources */,
 				B4C9D93A1F7A219100717A4E /* DutInfoTeachSite.swift in Sources */,
 				B4C9D9371F7A219100717A4E /* DutInfoPortalSite.swift in Sources */,
+				B441503C2099C5D800DC73F9 /* DUTInfoLibrarySite.swift in Sources */,
 				B4B70E911F0A25A500174471 /* DUTInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
