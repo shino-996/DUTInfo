@@ -1,5 +1,5 @@
 //
-//  DUTInfoLibrarySite.swift
+//  LibrarySite.swift
 //  DUTInfoDemo
 //
 //  Created by shino on 2018/5/2.
@@ -10,10 +10,10 @@ import Fuzi
 import PromiseKit
 
 extension DUTInfo {
-    public func openLibraryInfo() -> (open: String, close: String)? {
-        var value: (String, String)?
+    public func libraryInfo() -> JSON {
+        var value = ""
         let semaphore = DispatchSemaphore(value: 0)
-        let queue = DispatchQueue(label: "space.shino.library")
+        let queue = DispatchQueue(label: "libraryinfo")
         firstly { () -> Promise<Rsp> in
             let url = URL(string: "http://202.118.72.80/web/opentime_show.asp")!
             let request = URLRequest(url: url)
@@ -26,7 +26,11 @@ extension DUTInfo {
                 let tmp = infoStr[1].split(separator: "-")
                 let startDateStr = String(infoStr[0]) + ":" + String(tmp[0])
                 let endDateStr = String(tmp[1]) + ":" + String(String(infoStr[2]).split(separator: "\r\n")[0])
-                value = (startDateStr, endDateStr)
+                let library = Library(open: startDateStr,
+                                      close: endDateStr)
+                let encoder = JSONEncoder()
+                let jsonData = try! encoder.encode(library)
+                value = String(data: jsonData, encoding: .utf8)!
             }
         }.ensure(on: queue) {
             semaphore.signal()

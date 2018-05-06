@@ -15,30 +15,64 @@ public enum DUTError: Error {
     case authError
     case evaluateError
     case netError
+    case htmlError
+    case cookieError
     case otherError
 }
 
-typealias Rsp = (data: Data, response: URLResponse)
+// 登录网站种类
+enum DUTSite: String {
+    case portal = "?service=https%3A%2F%2Fportal.dlut.edu.cn%2Ftp%2F"
+    case teach = "?service=https%3A%2F%2Fportal.dlut.edu.cn%2Fsso%2Fsso_jw.jsp"
+    case library
+}
 
-public class DUTInfo: NSObject {
+// 请求信息种类
+public enum DUTInfoType: String {
+    case net
+    case ecard
+    case person
+    case course
+    case test
+    case grade
+    case library
+}
+
+extension DUTInfoType {
+    var site: DUTSite {
+        switch self {
+        case .net:
+            return .portal
+        case .ecard:
+            return .portal
+        case .person:
+            return .portal
+        case .course:
+            return .teach
+        case .test:
+            return .teach
+        case .grade:
+            return .teach
+        case.library:
+            return .library
+        }
+    }
+}
+
+public struct DUTInfo {
     //学号
-    public var studentNumber: String
-    //教务处密码，默认为身份证号后6位
-    public var teachPassword: String
+    public let studentNumber: String
     //校园门户密码，默认为身份证号后6位
-    public var portalPassword: String
+    public let password: String
+    
+    public let requests: [DUTInfoType]
     
     //用于网络请求的session
-    //新版校园门户
-    var portalSession: URLSession!
-    //教务处
-    var teachSession: URLSession!
+    let session = URLSession(configuration: .ephemeral)
     
-    public init(studentNumber: String = "",
-                teachPassword: String = "",
-                portalPassword: String = "") {
+    public init(studentNumber: String, password: String, requestType: [DUTInfoType]) {
         self.studentNumber = studentNumber
-        self.teachPassword = teachPassword
-        self.portalPassword = portalPassword
+        self.password = password
+        self.requests = requestType
     }
 }
