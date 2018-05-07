@@ -80,7 +80,7 @@ extension DUTInfo {
     private func parseCourse(_ string: String) -> JSON {
         let parseString = try! HTMLDocument(string: string)
         let courseSource = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
-        var courses = [Course]()
+        var courses = [Info.Course]()
         for courseData in courseSource {
             let items = courseData.xpath("./td")
             if items.count > 7 {
@@ -93,7 +93,7 @@ extension DUTInfo {
                     .filter {$0.unicodeScalars.first?.value ?? 128 < 128}
                     .split(separator: "-")
                 if teachWeeks.count == 0 {
-                    let course = Course(name: name,
+                    let course = Info.Course(name: name,
                                         teacher: teacher,
                                         time: nil)
                     courses.append(course)
@@ -108,12 +108,12 @@ extension DUTInfo {
                 let place = items[16].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
                     + " "
                     + items[17].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                let courseTime = Time(place: place,
+                let courseTime = Info.Course.Time(place: place,
                                       startsection: startsection,
                                       endsection: endsection,
                                       week: week,
                                       teachweek: teachweek)
-                let course = Course(name: name,
+                let course = Info.Course(name: name,
                                     teacher: teacher,
                                     time: [courseTime])
                 courses.append(course)
@@ -136,18 +136,18 @@ extension DUTInfo {
                 let place = items[5].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
                     + " "
                     + items[6].stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                let courseTime = Time(place: place,
+                let courseTime = Info.Course.Time(place: place,
                                 startsection: startsection,
                                 endsection: endsection,
                                 week: week,
                                 teachweek: teachweek)
                 if let time = course.time {
-                    let newCourse = Course(name: course.name,
+                    let newCourse = Info.Course(name: course.name,
                                            teacher: course.teacher,
                                            time: [[courseTime], time].flatMap { $0 })
                     courses.append(newCourse)
                 } else {
-                    let newCourse = Course(name: course.name,
+                    let newCourse = Info.Course(name: course.name,
                                            teacher: course.teacher,
                                            time: [courseTime])
                     courses.append(newCourse)
@@ -191,7 +191,7 @@ extension DUTInfo {
         let str = String(rsp: rsp)
         let parseString = try! HTMLDocument(string: str)
         let courses = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
-        var testData = [Test]()
+        var testData = [Info.Test]()
         for course in courses {
             let item = course.xpath("./td")
             let name = item[4].stringValue
@@ -199,7 +199,7 @@ extension DUTInfo {
             let date = item[5].stringValue
             let time = item[6].stringValue
             let place = item[2].stringValue + " " + item[3].stringValue
-            let test = Test(name: name,
+            let test = Info.Test(name: name,
                             teachweek: teachweek,
                             date: date,
                             time: time,

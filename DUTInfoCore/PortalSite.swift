@@ -67,7 +67,7 @@ extension DUTInfo {
         }
         let decoder = JSONDecoder()
         let netInfo = try! decoder.decode([NetInfo].self, from: rsp.data).first!
-        let net =  Net(cost: Double(netInfo.fee)!,
+        let net =  Info.Net(cost: Double(netInfo.fee)!,
                        flow: 30720 - Double(netInfo.usedTraffic)!)
         let encoder = JSONEncoder()
         let jsonData = try! encoder.encode(net)

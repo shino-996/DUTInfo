@@ -12,9 +12,18 @@ class ViewController: UIViewController {
     var dutInfo: DUTInfo!
     override func viewDidLoad() {
         super.viewDidLoad()
-        let request: [DUTInfoType] = [.net, .course, .ecard, .person, .test, .library]
-        dutInfo = DUTInfo(studentNumber: "学号", password: "校园门户密码", requestType: request)
+        let fetch: [DUTFetch] = [.net, .course, .test, .library]
+        dutInfo = DUTInfo(studentNumber: "学号", password: "教务处密码", fetches: fetch)
         let value = dutInfo.fetchInfo()
-        print(value)
+        struct Info: Decodable {
+            let net: Net
+            struct Net: Decodable {
+                let cost: Double
+                let flow: Double
+            }
+        }
+        let decoder = JSONDecoder()
+        let info = try! decoder.decode(Info.self, from: value.data(using: .utf8)!)
+        print(info.net)
     }
 }

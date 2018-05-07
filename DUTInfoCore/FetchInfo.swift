@@ -11,30 +11,28 @@ import PromiseKit
 
 extension DUTInfo {
     public func fetchInfo() -> JSON {
-        var value = [String: String]()
-        if requests.count == 0 {
+        var value = [String: JSON]()
+        if fetches.count == 0 {
             return ""
         }
-        if let libraryRequest = (requests.filter { $0.site == .library }).first {
+        if let libraryRequest = (fetches.filter { $0.site == .library }).first {
             value[libraryRequest.rawValue] = libraryInfo()
         }
         let semaphore = DispatchSemaphore(value: 0)
         let queue = DispatchQueue(label: "fetchinfo")
         firstly(execute: login)
         .done(on: queue) {
-            if (self.requests.filter { $0.site == .teach }).count != 0 {
+            if (self.fetches.filter { $0.site == .teach }).count != 0 {
                 self.teach()
             }
-            value.merge(self.fetchInfo(self.requests.filter { $0.site != .library }), uniquingKeysWith: + )
+            value.merge(self.fetchInfo(self.fetches.filter { $0.site != .library })) { origin, _ in origin }
         }.ensure(on: queue) {
             semaphore.signal()
         }.catch(on: queue) { error in
             print(error)
         }
         _ = semaphore.wait(timeout: .distantFuture)
-        let encoder = JSONEncoder()
-        let jsonData = try! encoder.encode(value)
-        return String(data: jsonData, encoding: .utf8)!
+        return Info.exportJson(value)
     }
     
     func teach() {
@@ -49,19 +47,17 @@ extension DUTInfo {
         _ = semaphore.wait(timeout: .distantFuture)
     }
     
-    func fetchInfo(_ requests: [DUTInfoType]) -> [String: String] {
-        var value = [String: String]()
-        for request in requests {
+    func fetchInfo(_ fetches: [DUTFetch]) -> [String: JSON] {
+        var value = [String: JSON]()
+        for fetch in fetches {
             var promise: Any = ()
             let semaphore = DispatchSemaphore(value: 0)
             let queue = DispatchQueue(label: "fetchrequest")
-            switch request {
+            switch fetch {
             case .course:
                 promise = self.courseInfo
             case .test:
                 promise = self.testInfo
-            case .grade:
-                break
             case .net:
                 promise = self.netInfo
             case .ecard:
@@ -73,7 +69,7 @@ extension DUTInfo {
             }
             firstly(execute: promise as! () -> Promise<String>)
             .map(on: queue) {
-                value[request.rawValue] = $0
+                value[fetch.rawValue] = $0
             }.ensure(on: queue) {
                 semaphore.signal()
             }.catch(on: queue) {

@@ -28,7 +28,7 @@ enum DUTSite: String {
 }
 
 // 请求信息种类
-public enum DUTInfoType: String {
+public enum DUTFetch: String {
     case net
     case ecard
     case person
@@ -38,7 +38,7 @@ public enum DUTInfoType: String {
     case library
 }
 
-extension DUTInfoType {
+extension DUTFetch {
     var site: DUTSite {
         switch self {
         case .net:
@@ -65,14 +65,14 @@ public struct DUTInfo {
     //校园门户密码，默认为身份证号后6位
     public let password: String
     
-    public let requests: [DUTInfoType]
+    public let fetches: [DUTFetch]
     
     //用于网络请求的session
     let session = URLSession(configuration: .ephemeral)
     
-    public init(studentNumber: String, password: String, requestType: [DUTInfoType]) {
+    public init(studentNumber: String, password: String, fetches: [DUTFetch]) {
         self.studentNumber = studentNumber
         self.password = password
-        self.requests = requestType
+        self.fetches = fetches
     }
 }

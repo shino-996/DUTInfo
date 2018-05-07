@@ -26,7 +26,7 @@ extension DUTInfo {
                 let tmp = infoStr[1].split(separator: "-")
                 let startDateStr = String(infoStr[0]) + ":" + String(tmp[0])
                 let endDateStr = String(tmp[1]) + ":" + String(String(infoStr[2]).split(separator: "\r\n")[0])
-                let library = Library(open: startDateStr,
+                let library = Info.Library(open: startDateStr,
                                       close: endDateStr)
                 let encoder = JSONEncoder()
                 let jsonData = try! encoder.encode(library)
