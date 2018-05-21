@@ -8,46 +8,29 @@
 
 import Fuzi
 import PromiseKit
+import AwaitKit
 
 //校园门户信息，可以通过外网访问
 //http://portal.dlut.edu.cn/
 extension DUTInfo {
     func netInfo() -> Promise<JSON> {
-        return Promise { resolve in
-            let queue = DispatchQueue(label: "netinfo.promise")
-            firstly(execute: fetchNetInfo)
-            .map(on: queue, parseNetInfo)
-            .map(on: queue) {
-                resolve.fulfill($0)
-            }.catch(on: queue) {
-                resolve.reject($0)
-            }
+        return async {
+            let netRsp = try await(self.fetchNetInfo())
+            return self.parseNetInfo(netRsp)
         }
     }
     
-    func ecardInfo() -> Promise<String> {
-        return Promise { resolve in
-            let queue = DispatchQueue(label: "ecardinfo.promise")
-            firstly(execute: fetchEcardInfo)
-            .map(on: queue, parseEcardInfo)
-            .map(on: queue) {
-                resolve.fulfill($0)
-            }.catch(on: queue) {
-                resolve.reject($0)
-            }
+    func ecardInfo() -> Promise<JSON> {
+        return async {
+            let ecardRsp = try await(self.fetchEcardInfo())
+            return self.parseEcardInfo(ecardRsp)
         }
     }
     
-    func personInfo() -> Promise<String> {
-        return Promise { resolve in
-            let queue = DispatchQueue(label: "personinfo.promise")
-            firstly(execute: fetchPersonInfo)
-            .map(on: queue, parsePersonInfo)
-            .map(on: queue) {
-                resolve.fulfill($0)
-            }.catch(on: queue) {
-                resolve.reject($0)
-            }
+    func personInfo() -> Promise<JSON> {
+        return async {
+            let personRsp = try await(self.fetchPersonInfo())
+            return self.parsePersonInfo(personRsp)
         }
     }
     

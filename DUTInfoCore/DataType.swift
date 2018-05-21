@@ -16,26 +16,26 @@ public typealias JSON = String
 typealias Rsp = (data: Data, response: URLResponse)
 
 struct Info: Codable {
-    let course: Course?
-    let test: Test?
+    let course: [Course]?
+    let test: [Test]?
     let net: Net?
     let person: String?
     let ecard: Double?
     let library: Library?
     
     static func exportJson(_ value: [String: JSON]) -> JSON {
-        var course: Course?
-        var test: Test?
+        var course: [Course]?
+        var test: [Test]?
         var net: Net?
         var person: String?
         var ecard: Double?
         var library: Library?
         let decoder = JSONDecoder()
         if let courseData = value["course"]?.data(using: .utf8) {
-            course = try? decoder.decode(Course.self, from: courseData)
+            course = try? decoder.decode([Course].self, from: courseData)
         }
         if let testData = value["test"]?.data(using: .utf8) {
-            test = try? decoder.decode(Test.self, from: testData)
+            test = try? decoder.decode([Test].self, from: testData)
         }
         if let netData = value["net"]?.data(using: .utf8) {
             net = try? decoder.decode(Net.self, from: netData)

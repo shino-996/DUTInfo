@@ -8,40 +8,29 @@
 
 import Fuzi
 import PromiseKit
+import AwaitKit
 
 // 登录请求和登录验证
 extension DUTInfo {
     public func login() -> Bool {
-        var value = false
-        let semaphore = DispatchSemaphore(value: 0)
-        let queue = DispatchQueue(label: "login.promise")
-        firstly {
-            return login()
-        }.done(on: queue) {
-            value = true
-        }.ensure(on: queue) {
-            semaphore.signal()
-        }.catch(on: queue) { error in
+        do {
+            try await(login())
+            return true
+        } catch (let error) {
             print(error)
         }
-        _ = semaphore.wait(timeout: .distantFuture)
-        return value
+        return false
     }
     
     // 把两步的登录 Promise 封装成一个 Promise
     func login() -> Promise<Void> {
-        return Promise { resolve in
-            let queue = DispatchQueue(label: "login.promise")
-            firstly(execute: fetchCookie)
-            .then(on: queue, postLogin)
-            .done(on: queue) {
-                if self.loginVerify($0) {
-                    resolve.fulfill(())
-                } else {
-                    throw DUTError.authError
-                }
-            }.catch(on: queue) {
-                resolve.reject($0)
+        return async {
+            let lt_ticket_rsp = try await(self.fetchCookie())
+            let auth = try await(self.postLogin(lt_ticket_rsp))
+            if self.loginVerify(auth) {
+                return
+            } else {
+                throw DUTError.authError
             }
         }
     }
@@ -49,32 +38,24 @@ extension DUTInfo {
     // 合并登录教务处网站的 Promise 合并成一个 Promise
     // 需要在登录统一验证之后才可以登录教务处
     func loginTeach() -> Promise<Void> {
-        return Promise { resolve in
-            let queue = DispatchQueue(label: "loginteach.promise")
-            firstly(execute: jumpTeach)
-            .then(on: queue, fetchTeachPage)
-            .map(on: queue, teachLoginVerify)
-            .done(on: queue) {
-                if $0 {
-                    resolve.fulfill(())
-                } else {
-                    throw DUTError.authError
-                }
-            }.catch(on: queue) {
-                resolve.reject($0)
+        return async {
+            let authKey = try await(self.jumpTeach())
+            let auth = try await(self.fetchTeachPage(authKey))
+            if self.teachLoginVerify(auth) {
+                return
+            } else {
+                throw DUTError.authError
             }
         }
     }
-}
-
-extension DUTInfo {
-    func fetchCookie() -> Promise<Rsp> {
+    
+    private func fetchCookie() -> Promise<Rsp> {
         let url = URL(string: "https://sso.dlut.edu.cn/cas/login" + DUTSite.portal.rawValue)!
         let request = URLRequest(url: url)
         return session.dataTask(.promise, with: request)
     }
     
-    func postLogin(_ rsp: Rsp) throws -> Promise<Rsp> {
+    private func postLogin(_ rsp: Rsp) throws -> Promise<Rsp> {
         guard let html = try? HTMLDocument(data: rsp.data) else {
             throw DUTError.htmlError
         }
@@ -102,13 +83,13 @@ extension DUTInfo {
         return session.dataTask(.promise, with: request)
     }
     
-    func jumpTeach() -> Promise<Rsp> {
+    private func jumpTeach() -> Promise<Rsp> {
         let url = URL(string: "https://sso.dlut.edu.cn/cas/login" + DUTSite.teach.rawValue)!
         let request = URLRequest(url: url)
         return session.dataTask(.promise, with: request)
     }
     
-    func fetchTeachPage(_ rsp: Rsp) throws -> Promise<Rsp> {
+    private func fetchTeachPage(_ rsp: Rsp) throws -> Promise<Rsp> {
         guard let html = try? HTMLDocument(data: rsp.data) else {
             throw DUTError.htmlError
         }
@@ -128,12 +109,12 @@ extension DUTInfo {
         return session.dataTask(.promise, with: request)
     }
     
-    func loginVerify(_ rsp: Rsp) -> Bool {
+    private func loginVerify(_ rsp: Rsp) -> Bool {
         let verifyString = String(rsp: rsp)
         return verifyString.hasPrefix("<META http-equiv=\"Refresh\" content=\"0; url=")
     }
     
-    func teachLoginVerify(_ rsp: Rsp) -> Bool {
+    private func teachLoginVerify(_ rsp: Rsp) -> Bool {
         let str = String(rsp: rsp)
         let htmlStr = try! HTMLDocument(string: str)
         let verifyStr = htmlStr.title

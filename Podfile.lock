@@ -1,28 +1,32 @@
 PODS:
-  - Fuzi (2.0.1)
-  - PromiseKit (6.2.5):
-    - PromiseKit/CorePromise (= 6.2.5)
-    - PromiseKit/Foundation (= 6.2.5)
-    - PromiseKit/UIKit (= 6.2.5)
-  - PromiseKit/CorePromise (6.2.5)
-  - PromiseKit/Foundation (6.2.5):
+  - AwaitKit (5.0.0):
+    - PromiseKit (~> 6)
+  - Fuzi (2.1.0)
+  - PromiseKit (6.2.7):
+    - PromiseKit/CorePromise (= 6.2.7)
+    - PromiseKit/Foundation (= 6.2.7)
+    - PromiseKit/UIKit (= 6.2.7)
+  - PromiseKit/CorePromise (6.2.7)
+  - PromiseKit/Foundation (6.2.7):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.2.5):
+  - PromiseKit/UIKit (6.2.7):
     - PromiseKit/CorePromise
 
 DEPENDENCIES:
-  - Fuzi (= 2.0.1)
-  - PromiseKit
+  - AwaitKit
+  - Fuzi
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
+    - AwaitKit
     - Fuzi
     - PromiseKit
 
 SPEC CHECKSUMS:
-  Fuzi: f64983dea705491d3aedd32351247a09523e7efd
-  PromiseKit: a26828b0a8d5874960dfdb575b57a70790ec36f1
+  AwaitKit: d8a6e30eeb2da916630270b44636b31033388bd8
+  Fuzi: 8c57344debff6d3a0c76a9e0f549152defdaaa48
+  PromiseKit: 12b9d87748b170714247d8b2677146ca57e488f2
 
-PODFILE CHECKSUM: 09a9c6c7128b354147e84801799fcd51aff94078
+PODFILE CHECKSUM: edb85faf0dba4bc00a7de01a378e8e6d3488e847
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.2

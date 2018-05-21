@@ -6,9 +6,9 @@
 //  Copyright © 2017年 shino. All rights reserved.
 //
 
-import Foundation
 import Fuzi
 import PromiseKit
+import AwaitKit
 
 //教务处网站信息，只有在校园网内网可以访问
 //http://zhjw.dlut.edu.cn
@@ -29,29 +29,17 @@ extension String {
 
 extension DUTInfo {
     func courseInfo() -> Promise<JSON> {
-        return Promise { resolve in
-            let queue = DispatchQueue(label: "courseinfo.promise")
-            firstly(execute: fetchCourse)
-            .map(on:queue, evaluateVerify)
-            .map(on: queue, parseCourse)
-            .done(on: queue) {
-                resolve.fulfill($0)
-            }.catch(on: queue) {
-                resolve.reject($0)
-            }
+        return async {
+            let courseRsp = try await(self.fetchCourse())
+            let html = try self.evaluateVerify(courseRsp)
+            return self.parseCourse(html)
         }
     }
     
     func testInfo() -> Promise<JSON> {
-        return Promise { resolve in
-            let queue = DispatchQueue(label: "testinfo.promise")
-            firstly(execute: fetchTest)
-            .map(on: queue, parseTest)
-            .map(on: queue) {
-                resolve.fulfill($0)
-            }.catch(on: queue) {
-                resolve.reject($0)
-            }
+        return async {
+            let testRsp = try await(self.fetchTest())
+            return self.parseTest(testRsp)
         }
     }
     
@@ -63,23 +51,22 @@ extension DUTInfo {
         return session.dataTask(.promise, with: request)
     }
     
-    private func evaluateVerify(_ rsp: Rsp) throws -> String {
+    private func evaluateVerify(_ rsp: Rsp) throws -> HTMLDocument {
         let str = String(rsp: rsp)
-        let parseString = try! HTMLDocument(string: str)
-        guard let verifyStr = parseString.title else {
-            return str
+        let html = try! HTMLDocument(string: str)
+        guard let verifyStr = html.title else {
+            throw DUTError.evaluateError
         }
         if verifyStr.trimmingCharacters(in: .whitespacesAndNewlines) == "错误信息" {
             throw DUTError.evaluateError
         } else {
-            return str
+            return html
         }
     }
     
     //解析出各门课程
-    private func parseCourse(_ string: String) -> JSON {
-        let parseString = try! HTMLDocument(string: string)
-        let courseSource = parseString.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
+    private func parseCourse(_ html: HTMLDocument) -> JSON {
+        let courseSource = html.xpath("//table[@class=\"displayTag\"]/tr[@class=\"odd\"]")
         var courses = [Info.Course]()
         for courseData in courseSource {
             let items = courseData.xpath("./td")

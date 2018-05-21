@@ -6,9 +6,8 @@
 //  Copyright © 2017年 shino. All rights reserved.
 //
 
-import PromiseKit
 import Fuzi
-import Foundation
+import PromiseKit
 
 //可能会遇到的错误类型
 public enum DUTError: Error {
@@ -66,6 +65,14 @@ public struct DUTInfo {
     public let password: String
     
     public let fetches: [DUTFetch]
+    
+    //请求信息所对应的 Promise 函数, 用于批量派发
+    static let fetchFunc = ["net": netInfo,
+                             "ecard": ecardInfo,
+                             "person": personInfo,
+                             "course": courseInfo,
+                             "test": testInfo,
+                             "library": libraryInfo]
     
     //用于网络请求的session
     let session = URLSession(configuration: .ephemeral)

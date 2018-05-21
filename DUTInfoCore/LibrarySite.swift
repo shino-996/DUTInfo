@@ -8,19 +8,15 @@
 
 import Fuzi
 import PromiseKit
+import AwaitKit
 
 extension DUTInfo {
-    func libraryInfo() -> JSON {
-        var value = ""
-        let semaphore = DispatchSemaphore(value: 0)
-        let queue = DispatchQueue(label: "libraryinfo")
-        firstly { () -> Promise<Rsp> in
+    func libraryInfo() -> Promise<JSON> {
+        return async {
             let url = URL(string: "http://202.118.72.80/web/opentime_show.asp")!
             let request = URLRequest(url: url)
-            return URLSession.shared.dataTask(.promise, with: request)
-        }.map(on: queue, String.init)
-        .done(on:queue) { str in
-            guard let html = try? HTMLDocument(string: str) else {
+            let libraryRsp = try await(self.session.dataTask(.promise, with: request))
+            guard let html = try? HTMLDocument(string: String(rsp: libraryRsp)) else {
                 throw DUTError.htmlError
             }
             let pnode = html.xpath("/html/body/p")
@@ -28,7 +24,7 @@ extension DUTInfo {
                 throw DUTError.htmlError
             }
             let timeArray = pnode[1].stringValue.filter {
-                ([((0 ... 9).map { "\($0)" }), ["-", "："]].flatMap { $0 }).contains(String($0))
+                ([((0 ... 9).map { "\($0)" }), ["-", "："]].flatMap { $0 }).contains("\($0)")
             }.split {
                 $0 == "-" || $0 == "："
             }
@@ -36,13 +32,7 @@ extension DUTInfo {
                                        close: timeArray[2] + ":" + timeArray[3])
             let encoder = JSONEncoder()
             let jsonData = try! encoder.encode(library)
-            value = String(data: jsonData, encoding: .utf8)!
-        }.ensure(on: queue) {
-            semaphore.signal()
-        }.catch(on: queue) { error in
-            print(error)
+            return String(data: jsonData, encoding: .utf8)!
         }
-        _ = semaphore.wait(timeout: .distantFuture)
-        return value
     }
 }
